@@ -1,0 +1,9 @@
+/home/rodrigo/Documents/Repositorios/dag!/src/main/java/com/qicubo/mobile/dag/controllers/ProductController.java
+/home/rodrigo/Documents/Repositorios/dag!/src/main/java/com/qicubo/mobile/dag/models/PaginatedList.java
+/home/rodrigo/Documents/Repositorios/dag!/src/main/java/com/qicubo/mobile/dag/Boot.java
+/home/rodrigo/Documents/Repositorios/dag!/src/main/java/com/qicubo/mobile/dag/controllers/CategoryController.java
+/home/rodrigo/Documents/Repositorios/dag!/src/main/java/com/qicubo/mobile/dag/daos/PaginatorQueryHelper.java
+/home/rodrigo/Documents/Repositorios/dag!/src/main/java/com/qicubo/mobile/dag/daos/ProductDao.java
+/home/rodrigo/Documents/Repositorios/dag!/src/main/java/com/qicubo/mobile/dag/models/Category.java
+/home/rodrigo/Documents/Repositorios/dag!/src/main/java/com/qicubo/mobile/dag/models/Product.java
+/home/rodrigo/Documents/Repositorios/dag!/src/main/java/com/qicubo/mobile/dag/daos/CategoryDao.java

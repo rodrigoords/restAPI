@@ -1,0 +1,9 @@
+com/qicubo/mobile/dag/models/Product.class
+com/qicubo/mobile/dag/models/PaginatedList.class
+com/qicubo/mobile/dag/daos/ProductDao.class
+com/qicubo/mobile/dag/daos/PaginatorQueryHelper.class
+com/qicubo/mobile/dag/daos/CategoryDao.class
+com/qicubo/mobile/dag/controllers/CategoryController.class
+com/qicubo/mobile/dag/Boot.class
+com/qicubo/mobile/dag/controllers/ProductController.class
+com/qicubo/mobile/dag/models/Category.class
