@@ -20,6 +20,6 @@ public class Boot
    @ResponseBody
    public String home()
    {
-      return "home";
+      return "teste";
    }
 }

@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.qicubo.mobile.dag.models.Category;
 import com.qicubo.mobile.dag.daos.CategoryDao;
 import com.qicubo.mobile.dag.daos.ProductDao;
 import com.qicubo.mobile.dag.models.Product;
