@@ -18,7 +18,8 @@ public class TipoDao {
 	   
 	   public List<Tipo> all()
 	   {
-	      return manager.createQuery("select t from dag_tipo t", Tipo.class).getResultList();
+		   List<Tipo> list = manager.createQuery("select t from Tipo t", Tipo.class).getResultList();
+		   return list;
 	   }
 
 	   public void save(Tipo tipo)
@@ -28,7 +29,8 @@ public class TipoDao {
 
 	   public Tipo findById(Integer id)
 	   {
-	      return manager.find(Tipo.class, id);
+	      Tipo tipo = manager.find(Tipo.class, id);
+	      return tipo;
 	   }
 
 	   public void remove(Tipo tipo)
