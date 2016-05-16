@@ -13,38 +13,31 @@ import com.qicubo.mobile.dag.models.Tipo;
 @Repository
 public class TipoDao {
 
-	   @PersistenceContext
-	   private EntityManager manager;
-	   
-	   public List<Tipo> all()
-	   {
-		   List<Tipo> list = manager.createQuery("select t from Tipo t", Tipo.class).getResultList();
-		   return list;
-	   }
+    @PersistenceContext
+    private EntityManager manager;
 
-	   public void save(Tipo tipo)
-	   {
-	      manager.persist(tipo);
-	   }
+    public List<Tipo> all() {
+        return manager.createQuery("select t from Tipo t", Tipo.class).getResultList();
 
-	   public Tipo findById(Integer id)
-	   {
-	      Tipo tipo = manager.find(Tipo.class, id);
-	      return tipo;
-	   }
+    }
 
-	   public void remove(Tipo tipo)
-	   {
-	      manager.remove(tipo);
-	   }
+    public void save(Tipo tipo) {
+        manager.persist(tipo);
+    }
 
-	   public void update(Tipo tipo)
-	   {
-	      manager.merge(tipo);
-	   }
+    public Tipo findById(Integer id) {
+        return manager.find(Tipo.class, id);
+    }
 
-	   public PaginatedList paginated(int page, int max)
-	   {
-	      return new PaginatorQueryHelper().list(manager, Tipo.class, page, max);
-	   }
+    public void remove(Tipo tipo) {
+        manager.remove(tipo);
+    }
+
+    public void update(Tipo tipo) {
+        manager.merge(tipo);
+    }
+
+    public PaginatedList paginated(int page, int max) {
+        return new PaginatorQueryHelper().list(manager, Tipo.class, page, max);
+    }
 }
