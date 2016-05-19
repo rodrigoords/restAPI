@@ -7,7 +7,6 @@ import javax.persistence.PersistenceContext;
 
 import org.springframework.stereotype.Repository;
 
-import com.qicubo.mobile.dag.models.PaginatedList;
 import com.qicubo.mobile.dag.models.UsuarioBolha;
 
 @Repository
@@ -36,8 +35,4 @@ public class UsuarioBolhaDao {
 	      manager.remove(userBolha);
 	   }
 
-	   public PaginatedList paginated(int page, int max)
-	   {
-	      return new PaginatorQueryHelper().list(manager, UsuarioBolha.class, page, max);
-	   }
 }

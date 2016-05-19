@@ -8,7 +8,6 @@ import javax.persistence.PersistenceContext;
 import org.springframework.stereotype.Repository;
 
 import com.qicubo.mobile.dag.models.Bolha;
-import com.qicubo.mobile.dag.models.PaginatedList;
 
 
 @Repository
@@ -25,7 +24,7 @@ public class BolhaDao {
 		manager.persist(bolha);
 	}
 
-	public Bolha findById(Integer id) {
+	public Bolha findById(Long id) {
 		return manager.find(Bolha.class, id);
 	}
 
@@ -37,7 +36,4 @@ public class BolhaDao {
 		manager.merge(bolha);
 	}
 
-	public PaginatedList paginated(int page, int max) {
-		return new PaginatorQueryHelper().list(manager, Bolha.class, page, max);
-	}
 }

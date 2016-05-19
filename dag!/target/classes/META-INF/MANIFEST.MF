@@ -1,9 +1,0 @@
-Manifest-Version: 1.0
-Implementation-Vendor: Pivotal Software, Inc.
-Implementation-Title: dag
-Implementation-Version: 1.0.0-SNAPSHOT
-Implementation-Vendor-Id: com.qicubo.mobile
-Build-Jdk: 1.7.0_51
-Built-By: user
-Created-By: Maven Integration for Eclipse
-

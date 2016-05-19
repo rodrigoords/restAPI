@@ -5,9 +5,11 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+import org.hibernate.Criteria;
+import org.hibernate.Session;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
-import com.qicubo.mobile.dag.models.PaginatedList;
 import com.qicubo.mobile.dag.models.Tipo;
 
 @Repository
@@ -15,7 +17,8 @@ public class TipoDao {
 
     @PersistenceContext
     private EntityManager manager;
-
+    private Session	session;
+    
     public List<Tipo> all() {
         return manager.createQuery("select t from Tipo t", Tipo.class).getResultList();
 
@@ -25,10 +28,17 @@ public class TipoDao {
         manager.persist(tipo);
     }
 
-    public Tipo findById(Integer id) {
+    public Tipo findById(Long id) {
         return manager.find(Tipo.class, id);
     }
-
+    
+    @SuppressWarnings("unchecked")
+	public List<Tipo> findByNome(String nome){
+    	Criteria criteria = session.createCriteria(Tipo.class); 
+    	criteria.add(Restrictions.eq("nome", nome));
+    	return criteria.list(); 
+    }
+    
     public void remove(Tipo tipo) {
         manager.remove(tipo);
     }
@@ -37,7 +47,4 @@ public class TipoDao {
         manager.merge(tipo);
     }
 
-    public PaginatedList paginated(int page, int max) {
-        return new PaginatorQueryHelper().list(manager, Tipo.class, page, max);
-    }
 }
