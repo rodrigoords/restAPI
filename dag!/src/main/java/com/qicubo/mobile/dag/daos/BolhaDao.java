@@ -17,7 +17,7 @@ public class BolhaDao {
 	private EntityManager manager;
 
 	public List<Bolha> all() {
-		return manager.createQuery("select b from dag_bolha b", Bolha.class).getResultList();
+		return manager.createQuery("select b from Bolha b", Bolha.class).getResultList();
 	}
 
 	public void save(Bolha bolha) {

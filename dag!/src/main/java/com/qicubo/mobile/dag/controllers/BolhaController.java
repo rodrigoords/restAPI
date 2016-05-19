@@ -13,42 +13,48 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import com.qicubo.mobile.dag.models.Bolha;
 import com.qicubo.mobile.dag.models.Usuario;
 import com.qicubo.mobile.dag.services.BolhaService;
+import com.qicubo.mobile.dag.services.UsuarioService;
 
 @Controller
 @RequestMapping("/bolha")
 public class BolhaController {
-	
+
 	@Autowired
 	private BolhaService bolhaService;
+	@Autowired
+	private UsuarioService usuarioService;
 
 	@RequestMapping(method = RequestMethod.GET)
 	public ResponseEntity<List<Bolha>> list() {
-		
-	    List<Bolha> bolhas = bolhaService.findAllBolhas();
-		
-	    if (bolhas.isEmpty()){
-	        return new ResponseEntity<List<Bolha>>(HttpStatus.NO_CONTENT);
-	    }
-	    
+
+		List<Bolha> bolhas = bolhaService.findAllBolhas();
+
+		if (bolhas.isEmpty()) {
+			return new ResponseEntity<List<Bolha>>(HttpStatus.NO_CONTENT);
+		}
+
 		return new ResponseEntity<List<Bolha>>(bolhas, HttpStatus.OK);
 	}
-	
+
 	@RequestMapping(method = RequestMethod.GET, value = "/{id}")
 	public ResponseEntity<Bolha> getBolhaById(@PathVariable("id") Long id) {
 		Bolha bolha = bolhaService.findById(id);
-		if (bolha == null){
+		if (bolha == null) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 		return new ResponseEntity<>(bolha, HttpStatus.OK);
 	}
-	
+
 	@RequestMapping(method = RequestMethod.GET, value = "/{user}")
-	public ResponseEntity<List<Bolha>>  getBolhaByUser(@PathVariable("user") Usuario user) {
+	public ResponseEntity<List<Bolha>> getBolhaByUser(@PathVariable("user") String login) {
+
+		Usuario user = usuarioService.findByLogin(login);
+
 		List<Bolha> bolhas = bolhaService.findBolhaByUser(user);
-		if (bolhas.isEmpty()){
+		if (bolhas.isEmpty()) {
 			return new ResponseEntity<List<Bolha>>(HttpStatus.NO_CONTENT);
 		}
 		return new ResponseEntity<List<Bolha>>(bolhas, HttpStatus.OK);
 	}
-	
+
 }
