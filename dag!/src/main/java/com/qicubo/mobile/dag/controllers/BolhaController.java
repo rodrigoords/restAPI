@@ -25,6 +25,7 @@ public class BolhaController {
 	private UsuarioService usuarioService;
 
 	@RequestMapping(method = RequestMethod.GET)
+
 	public ResponseEntity<List<Bolha>> list() {
 
 		List<Bolha> bolhas = bolhaService.findAll();
@@ -33,6 +34,18 @@ public class BolhaController {
 			return new ResponseEntity<List<Bolha>>(HttpStatus.NO_CONTENT);
 		}
 
+		return new ResponseEntity<List<Bolha>>(bolhas, HttpStatus.OK);
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = "/{lat,longi}")
+	public ResponseEntity<List<Bolha>> getCloserBolhas(@PathVariable("lat, longi") Long lat, Long longi){
+		
+		List<Bolha> bolhas = bolhaService.findAllCloserBolhas(lat, longi);
+		
+		if (bolhas.isEmpty()) {
+			return new ResponseEntity<List<Bolha>>(HttpStatus.NO_CONTENT);
+		}
+		
 		return new ResponseEntity<List<Bolha>>(bolhas, HttpStatus.OK);
 	}
 
