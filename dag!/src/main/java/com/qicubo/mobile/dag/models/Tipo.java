@@ -5,6 +5,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -13,11 +15,13 @@ public class Tipo {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-	@Column(name = "id_tipo")
+    @Column(name="id_tipo")
 	private Integer id;
 	private String nome;
 	private String descricao;
-
+	
+	@OneToMany
+	@JoinColumn(name = "id_tipo")
 	public Integer getId() {
 		return id;
 	}

@@ -6,6 +6,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -17,7 +18,11 @@ public class Bolha {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	@Column(name="id_bolha")
 	private Integer id;
+    @OneToOne
+    @JoinColumn(name="id_usuario")
 	private Usuario usuarioCriacao;
+	@ManyToOne
+	@JoinColumn(name = "id_tipo")
 	private Tipo tipo;
 	private String nome;
 	private String descricao;
@@ -33,8 +38,7 @@ public class Bolha {
 		this.id = id;
 	}
     
-    @OneToOne
-    @JoinColumn(name="id_usuario", nullable = false)
+
 	public Usuario getUsuarioCriacao() {
 		return usuarioCriacao;
 	}
@@ -42,8 +46,6 @@ public class Bolha {
 		this.usuarioCriacao = usuarioCriacao;
 	}
 	
-	@OneToOne
-	@JoinColumn(name="id_tipo", nullable = false)
 	public Tipo getTipo() {
 		return tipo;
 	}
