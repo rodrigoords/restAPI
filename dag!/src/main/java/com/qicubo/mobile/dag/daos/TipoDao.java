@@ -21,7 +21,6 @@ public class TipoDao {
     
     public List<Tipo> all() {
         return manager.createQuery("select t from Tipo t", Tipo.class).getResultList();
-
     }
 
     public void save(Tipo tipo) {

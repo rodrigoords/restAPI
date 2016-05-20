@@ -27,7 +27,7 @@ public class BolhaController {
 	@RequestMapping(method = RequestMethod.GET)
 	public ResponseEntity<List<Bolha>> list() {
 
-		List<Bolha> bolhas = bolhaService.findAllBolhas();
+		List<Bolha> bolhas = bolhaService.findAll();
 
 		if (bolhas.isEmpty()) {
 			return new ResponseEntity<List<Bolha>>(HttpStatus.NO_CONTENT);

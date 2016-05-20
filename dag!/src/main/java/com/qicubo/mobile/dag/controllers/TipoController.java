@@ -23,7 +23,7 @@ public class TipoController {
 	@RequestMapping(method = RequestMethod.GET)
 	public ResponseEntity<List<Tipo>> list() {
 		
-	    List<Tipo> tipo = tipoService.findAllTipos();
+	    List<Tipo> tipo = tipoService.findAll();
 		
 	    if (tipo.isEmpty()){
 	        return new ResponseEntity<List<Tipo>>(HttpStatus.NO_CONTENT);

@@ -10,7 +10,7 @@ public interface TipoService {
      
     List<Tipo> findByName(String name);
      
-    List<Tipo> findAllTipos(); 
+    List<Tipo> findAll(); 
      
     public boolean isTipoExist(Tipo tipo);
 

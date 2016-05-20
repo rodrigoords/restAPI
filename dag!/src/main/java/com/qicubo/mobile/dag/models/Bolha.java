@@ -5,6 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -13,12 +14,10 @@ import javax.persistence.Table;
 public class Bolha {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	@Column(name="id_bolha")
 	private Integer id;
-	@OneToOne
 	private Usuario usuarioCriacao;
-	@OneToOne
 	private Tipo tipo;
 	private String nome;
 	private String descricao;
@@ -33,48 +32,60 @@ public class Bolha {
 	public void setId(Integer id) {
 		this.id = id;
 	}
+    
+    @OneToOne
+    @JoinColumn(name="id_usuario", nullable = false)
 	public Usuario getUsuarioCriacao() {
 		return usuarioCriacao;
 	}
 	public void setUsuarioCriacao(Usuario usuarioCriacao) {
 		this.usuarioCriacao = usuarioCriacao;
 	}
+	
+	@OneToOne
+	@JoinColumn(name="id_tipo", nullable = false)
 	public Tipo getTipo() {
 		return tipo;
 	}
 	public void setTipo(Tipo tipo) {
 		this.tipo = tipo;
 	}
+	
 	public String getNome() {
 		return nome;
 	}
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
+	
 	public String getDescricao() {
 		return descricao;
 	}
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;
 	}
+	
 	public String getDtHoraCriacao() {
 		return dtHoraCriacao;
 	}
 	public void setDtHoraCriacao(String dtHoraCriacao) {
 		this.dtHoraCriacao = dtHoraCriacao;
 	}
+	
 	public Long getLatitude() {
 		return latitude;
 	}
 	public void setLatitude(Long latitude) {
 		this.latitude = latitude;
 	}
+	
 	public Long getLongitude() {
 		return longitude;
 	}
 	public void setLongitude(Long longitude) {
 		this.longitude = longitude;
 	}
+	
 	public Integer getIndRestrita() {
 		return indRestrita;
 	}

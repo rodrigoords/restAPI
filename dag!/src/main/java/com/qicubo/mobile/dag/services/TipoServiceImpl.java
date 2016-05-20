@@ -23,7 +23,7 @@ public class TipoServiceImpl implements TipoService{
 	}
 
 	@Override
-	public List<Tipo> findAllTipos() {
+	public List<Tipo> findAll() {
 		return tipoDao.all();
 	}
 
@@ -35,5 +35,6 @@ public class TipoServiceImpl implements TipoService{
 		}
 		return exists;
 	}
+
 	
 }

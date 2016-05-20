@@ -16,29 +16,29 @@ public class BolhaServiceImpl implements BolhaService {
 	private BolhaDao bolhaDao;
 
 	@Override
-	public Bolha findById(long id) {
+	public Bolha findById(Long id) {
 		return bolhaDao.findById(id);
 	}
 
 	@Override
-	public void createBolha(Bolha bolha) {
+	public void create(Bolha bolha) {
 		bolhaDao.save(bolha);
 	}
 
 	@Override
-	public void updateBolha(Bolha bolha) {
+	public void update(Bolha bolha) {
 		bolhaDao.update(bolha);
 
 	}
 
 	@Override
-	public void deleteBolhaById(long id) {
+	public void deleteById(Long id) {
 		Bolha bolha = bolhaDao.findById(id);
 		bolhaDao.remove(bolha);
 	}
 
 	@Override
-	public List<Bolha> findAllBolhas() {
+	public List<Bolha> findAll() {
 		return bolhaDao.all();
 	}
 
