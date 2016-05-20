@@ -16,17 +16,17 @@ public class Tipo {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name="id_tipo")
-	private Integer id;
+	private Long id;
 	private String nome;
 	private String descricao;
 	
 	@OneToMany
 	@JoinColumn(name = "id_tipo")
-	public Integer getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 

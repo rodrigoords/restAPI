@@ -16,7 +16,7 @@ public class Usuario {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name="id_usuario")
-	private Integer id;
+	private Long id;
 	private String nome;
 	private String sobreNome;
 	private String email;
@@ -24,10 +24,10 @@ public class Usuario {
 	
 	@OneToOne
 	@JoinColumn(name = "id_usuario")
-	public Integer getId() {
+	public Long getId() {
 		return id;
 	}
-	public void setId(Integer id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 	public String getNome() {

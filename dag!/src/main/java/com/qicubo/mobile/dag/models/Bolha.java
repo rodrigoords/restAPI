@@ -17,7 +17,7 @@ public class Bolha {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name="id_bolha")
-	private Integer id;
+	private Long id;
     @OneToOne
     @JoinColumn(name="id_usuario")
 	private Usuario usuarioCriacao;
@@ -31,10 +31,10 @@ public class Bolha {
 	private Long longitude;
 	private Integer indRestrita;
 	
-	public Integer getId() {
+	public Long getId() {
 		return id;
 	}
-	public void setId(Integer id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
     
