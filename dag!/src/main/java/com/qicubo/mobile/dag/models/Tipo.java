@@ -12,7 +12,14 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "dag_tipo")
 public class Tipo {
-
+	
+	public Tipo() {
+	}
+	
+	public Tipo(String nome) {
+		this.nome = nome;
+	}
+	
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name="id_tipo")

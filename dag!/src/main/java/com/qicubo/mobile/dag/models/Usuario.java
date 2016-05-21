@@ -13,10 +13,17 @@ import javax.persistence.Table;
 @Table(name = "dag_usuario")
 public class Usuario {
 	
+	public Usuario() {
+	}
+	public Usuario(String login) {
+		this.login = login;
+	}
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name="id_usuario")
 	private Long id;
+	private String login;
 	private String nome;
 	private String sobreNome;
 	private String email;
@@ -29,6 +36,12 @@ public class Usuario {
 	}
 	public void setId(Long id) {
 		this.id = id;
+	}
+	public String getLogin() {
+		return login;
+	}
+	public void setLogin(String login) {
+		this.login = login;
 	}
 	public String getNome() {
 		return nome;

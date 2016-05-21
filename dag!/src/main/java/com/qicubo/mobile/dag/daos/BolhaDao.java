@@ -4,10 +4,8 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
-import org.hibernate.Criteria;
-import org.hibernate.Session;
-import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
 import com.qicubo.mobile.dag.models.Bolha;
@@ -18,16 +16,19 @@ public class BolhaDao {
 
 	@PersistenceContext
 	private EntityManager manager;
-	private Session       session;
 
 	public List<Bolha> all() {
 		return manager.createQuery("select b from Bolha b", Bolha.class).getResultList();
 	}
 	
-	public List<Bolha> findBolhaByUsuario(Long idUsuario){
-       Criteria criteria = session.createCriteria(Bolha.class); 
-        criteria.add(Restrictions.eq("id_usuario", idUsuario));
-        return criteria.list(); 
+	@SuppressWarnings("unchecked")
+	public List<Bolha> findBolhaByUsuario(Long id){
+		
+		Query query = manager.createQuery("select b from Bolha b "
+										+ "where id_usuario = :idUsuario");
+		
+        query.setParameter("idUsuario", id);
+        return query.getResultList(); 
 	}
 	
 	public void save(Bolha bolha) {

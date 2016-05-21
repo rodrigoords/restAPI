@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 import org.springframework.stereotype.Repository;
 
@@ -25,11 +26,20 @@ public class UsuarioDao {
 	      manager.persist(user);
 	   }
 
-	   public Usuario findById(Integer id)
+	   public Usuario findById(Long id)
 	   {
 	      return manager.find(Usuario.class, id);
 	   }
-
+	   
+	   public Usuario findByLogin(String login) throws Exception{
+		   	
+		   Query query = manager.createQuery("select u from Usuario u "
+		   									+ "where u.login = :login");
+		   query.setParameter("login", login);	
+		   
+	       return (Usuario) query.getSingleResult(); 
+	   }
+	   
 	   public void remove(Usuario user)
 	   {
 	      manager.remove(user);

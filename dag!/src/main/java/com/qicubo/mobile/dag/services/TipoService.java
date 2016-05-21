@@ -8,7 +8,7 @@ public interface TipoService {
 	
     Tipo findById(Long id);
      
-    List<Tipo> findByName(String name);
+    Tipo findByName(String name);
      
     List<Tipo> findAll(); 
      

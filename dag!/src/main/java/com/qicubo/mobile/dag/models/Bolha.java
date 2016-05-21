@@ -1,5 +1,7 @@
 package com.qicubo.mobile.dag.models;
 
+import java.math.BigDecimal;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -27,8 +29,8 @@ public class Bolha {
 	private String nome;
 	private String descricao;
 	private String dtHoraCriacao;
-	private Long latitude;
-	private Long longitude;
+	private BigDecimal latitude;
+	private BigDecimal longitude;
 	private Integer indRestrita;
 	
 	public Long getId() {
@@ -74,17 +76,17 @@ public class Bolha {
 		this.dtHoraCriacao = dtHoraCriacao;
 	}
 	
-	public Long getLatitude() {
+	public BigDecimal getLatitude() {
 		return latitude;
 	}
-	public void setLatitude(Long latitude) {
+	public void setLatitude(BigDecimal latitude) {
 		this.latitude = latitude;
 	}
 	
-	public Long getLongitude() {
+	public BigDecimal getLongitude() {
 		return longitude;
 	}
-	public void setLongitude(Long longitude) {
+	public void setLongitude(BigDecimal longitude) {
 		this.longitude = longitude;
 	}
 	

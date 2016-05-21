@@ -19,7 +19,7 @@ public class TipoServiceImpl implements TipoService{
 	}
 
 	@Override
-	public List<Tipo> findByName(String name) {
+	public Tipo findByName(String name) {
 		return tipoDao.findByNome(name);
 	}
 
@@ -30,9 +30,9 @@ public class TipoServiceImpl implements TipoService{
 
 	@Override
 	public boolean isTipoExist(Tipo tipo) {
-		boolean exists = false;
-		if (!tipoDao.findByNome(tipo.getNome()).isEmpty()){
-			exists = true;
+		boolean exists = true;
+		if (tipoDao.findByNome(tipo.getNome()) == null){
+			exists = false;
 		}
 		return exists;
 	}

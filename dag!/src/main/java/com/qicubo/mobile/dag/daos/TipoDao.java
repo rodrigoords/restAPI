@@ -4,10 +4,8 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
-import org.hibernate.Criteria;
-import org.hibernate.Session;
-import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
 import com.qicubo.mobile.dag.models.Tipo;
@@ -17,7 +15,6 @@ public class TipoDao {
 
     @PersistenceContext
     private EntityManager manager;
-    private Session	session;
     
     public List<Tipo> all() {
         return manager.createQuery("select t from Tipo t", Tipo.class).getResultList();
@@ -30,12 +27,14 @@ public class TipoDao {
     public Tipo findById(Long id) {
         return manager.find(Tipo.class, id);
     }
-    
-    @SuppressWarnings("unchecked")
-	public List<Tipo> findByNome(String nome){
-    	Criteria criteria = session.createCriteria(Tipo.class); 
-    	criteria.add(Restrictions.eq("nome", nome));
-    	return criteria.list(); 
+       
+	public Tipo findByNome(String nome){
+		
+		Query query = manager.createQuery("select t from Tipo t "
+										+ "where t.nome = :nome");
+		query.setParameter("nome", nome);
+    	
+    	return (Tipo) query.getSingleResult(); 
     }
     
     public void remove(Tipo tipo) {

@@ -1,6 +1,9 @@
 package com.qicubo.mobile.dag.services;
 
+import java.math.BigDecimal;
 import java.util.List;
+
+import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -9,6 +12,7 @@ import com.qicubo.mobile.dag.daos.BolhaDao;
 import com.qicubo.mobile.dag.models.Bolha;
 import com.qicubo.mobile.dag.models.Usuario;
 
+@Transactional
 @Service("bolhaService")
 public class BolhaServiceImpl implements BolhaService {
 
@@ -41,23 +45,21 @@ public class BolhaServiceImpl implements BolhaService {
 	public List<Bolha> findAll() {
 		return bolhaDao.all();
 	}
-
 	@Override
 	public boolean isBolhaExist(Bolha bolha) {
-		// TODO Auto-generated method stub
-		return false;
+		List<Bolha> bolhas = findBolhaByUser(bolha.getUsuarioCriacao());
+		return !bolhas.isEmpty();
 	}
 
 	@Override
-	public List<Bolha> findAllCloserBolhas(Long latitude, Long longitude) {
+	public List<Bolha> findAllCloserBolhas(BigDecimal latitude, BigDecimal longitude) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public List<Bolha> findBolhaByUser(Usuario user) {
-		// TODO Auto-generated method stub
-		return null;
+		return bolhaDao.findBolhaByUsuario(user.getId());
 	}
 
 }
