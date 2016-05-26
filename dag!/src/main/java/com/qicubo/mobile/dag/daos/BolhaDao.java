@@ -6,11 +6,12 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
 import com.qicubo.mobile.dag.models.Bolha;
 
-
+@Component
 @Repository
 public class BolhaDao {
 

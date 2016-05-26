@@ -31,17 +31,17 @@ public class BolhaController {
 	@Autowired
 	private TipoService tipoService; 
 
-
+	
 	@RequestMapping(method = RequestMethod.GET, value = BolhaRestURIConstants.GET_ALL_BOLHA)
 	public ResponseEntity<List<Bolha>> list() {
 
 		List<Bolha> bolhas = bolhaService.findAll();
 
 		if (bolhas.isEmpty()) {
-			return new ResponseEntity<List<Bolha>>(HttpStatus.NO_CONTENT);
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		}
 
-		return new ResponseEntity<List<Bolha>>(bolhas, HttpStatus.OK);
+		return new ResponseEntity<>(bolhas, HttpStatus.OK);
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, value = BolhaRestURIConstants.GET_BOLHA_BY_ID)
@@ -59,54 +59,52 @@ public class BolhaController {
 		List<Bolha> bolhas = bolhaService.findAllCloserBolhas(lat, longi);
 		
 		if (bolhas.isEmpty()) {
-			return new ResponseEntity<List<Bolha>>(HttpStatus.NO_CONTENT);
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		}
 		
-		return new ResponseEntity<List<Bolha>>(bolhas, HttpStatus.OK);
+		return new ResponseEntity<>(bolhas, HttpStatus.OK);
 	}
 
 
 	@RequestMapping(method = RequestMethod.GET, value = BolhaRestURIConstants.GET_BOLHA_BY_USER_LOGIN)
-	public ResponseEntity<List<Bolha>> getBolhaByUser(@PathVariable("user") String login) {
+	public ResponseEntity<List<Bolha>> getBolhaByUser(@PathVariable("login") String login) {
 
 		Usuario user = usuarioService.findByLogin(login);
 
 		List<Bolha> bolhas = bolhaService.findBolhaByUser(user);
 		if (bolhas.isEmpty()) {
-			return new ResponseEntity<List<Bolha>>(HttpStatus.NO_CONTENT);
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		}
-		return new ResponseEntity<List<Bolha>>(bolhas, HttpStatus.OK);
+		return new ResponseEntity<>(bolhas, HttpStatus.OK);
 	}
 	
 	@RequestMapping(method = RequestMethod.POST, value = BolhaRestURIConstants.CREATE_BOLHA)
 	public ResponseEntity<Void> createBolha(@RequestBody Bolha bolha, UriComponentsBuilder ucBuilder ){
 		
-		Tipo tipo = new Tipo();
-		tipo = tipoService.findByName(bolha.getTipo().getNome());
+		Tipo tipo = tipoService.findByName(bolha.getTipo().getNome());
 		
 		if (tipo == null){
-			return new ResponseEntity<Void>(HttpStatus.FAILED_DEPENDENCY);
+			return new ResponseEntity<>(HttpStatus.FAILED_DEPENDENCY);
 		}
 		
-		Usuario usuario = new Usuario();
-		usuario = usuarioService.findByLogin(bolha.getUsuarioCriacao().getLogin());
+		Usuario usuario = usuarioService.findByLogin(bolha.getUsuarioCriacao().getLogin());
 		
 		if (usuario == null){
-			return new ResponseEntity<Void>(HttpStatus.FAILED_DEPENDENCY);
+			return new ResponseEntity<>(HttpStatus.FAILED_DEPENDENCY);
 		}
 		
 		bolha.setUsuarioCriacao(usuario);
 		bolha.setTipo(tipo);
 		
 		if (bolhaService.isBolhaExist(bolha)){
-			return new ResponseEntity<Void>(HttpStatus.CONFLICT);
+			return new ResponseEntity<>(HttpStatus.CONFLICT);
 		}
 		
 		bolhaService.create(bolha);
 		
 		HttpHeaders headers = new HttpHeaders();
         headers.setLocation(ucBuilder.path(BolhaRestURIConstants.CREATE_BOLHA).buildAndExpand(bolha.getId()).toUri());
-        return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
+        return new ResponseEntity<>(headers, HttpStatus.CREATED);
 	}
 	
 

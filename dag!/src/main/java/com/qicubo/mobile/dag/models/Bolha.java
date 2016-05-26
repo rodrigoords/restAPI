@@ -1,7 +1,5 @@
 package com.qicubo.mobile.dag.models;
 
-import java.math.BigDecimal;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -12,10 +10,13 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.qicubo.mobile.dag.types.Latitude;
+import com.qicubo.mobile.dag.types.Longitude;
+
 @Entity
 @Table(name = "dag_bolha")
 public class Bolha {
-
+    
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name="id_bolha")
@@ -29,18 +30,20 @@ public class Bolha {
 	private String nome;
 	private String descricao;
 	private String dtHoraCriacao;
-	private BigDecimal latitude;
-	private BigDecimal longitude;
+	private Latitude latitude;
+	private Longitude longitude;
 	private Integer indRestrita;
 	
-	public Long getId() {
+	public Bolha(){
+	}
+	
+    public Long getId() {
 		return id;
 	}
 	public void setId(Long id) {
 		this.id = id;
 	}
     
-
 	public Usuario getUsuarioCriacao() {
 		return usuarioCriacao;
 	}
@@ -76,17 +79,17 @@ public class Bolha {
 		this.dtHoraCriacao = dtHoraCriacao;
 	}
 	
-	public BigDecimal getLatitude() {
+	public Latitude getLatitude() {
 		return latitude;
 	}
-	public void setLatitude(BigDecimal latitude) {
+	public void setLatitude(Latitude latitude) {
 		this.latitude = latitude;
 	}
 	
-	public BigDecimal getLongitude() {
+	public Longitude getLongitude() {
 		return longitude;
 	}
-	public void setLongitude(BigDecimal longitude) {
+	public void setLongitude(Longitude longitude) {
 		this.longitude = longitude;
 	}
 	
