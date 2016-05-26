@@ -1,12 +1,11 @@
 package com.qicubo.mobile.dag.builders;
 
-import org.springframework.stereotype.Component;
-
 import com.qicubo.mobile.dag.models.Usuario;
 
-@Component
+
 public class UsuarioBuilder {
-    Usuario usuario = new Usuario();
+    
+	Usuario usuario = new Usuario();
     
     public UsuarioBuilder(){
         usuario.setLogin("test");

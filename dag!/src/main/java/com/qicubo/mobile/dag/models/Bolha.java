@@ -1,5 +1,6 @@
 package com.qicubo.mobile.dag.models;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -21,10 +22,10 @@ public class Bolha {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name="id_bolha")
 	private Long id;
-    @OneToOne
+    @OneToOne(cascade = {CascadeType.ALL})
     @JoinColumn(name="id_usuario")
 	private Usuario usuarioCriacao;
-	@ManyToOne
+	@ManyToOne(cascade = {CascadeType.ALL})
 	@JoinColumn(name = "id_tipo")
 	private Tipo tipo;
 	private String nome;

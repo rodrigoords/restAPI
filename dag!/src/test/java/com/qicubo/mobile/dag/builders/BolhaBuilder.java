@@ -3,20 +3,32 @@ package com.qicubo.mobile.dag.builders;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import org.springframework.stereotype.Component;
+
 import com.qicubo.mobile.dag.models.Bolha;
 import com.qicubo.mobile.dag.models.Tipo;
 import com.qicubo.mobile.dag.models.Usuario;
 import com.qicubo.mobile.dag.types.Latitude;
 import com.qicubo.mobile.dag.types.Longitude;
 
+@Component
 public class BolhaBuilder {
     
-    Bolha bolha = new Bolha();
-    Usuario usuario = new UsuarioBuilder().build();
-    Tipo tipo = new TipoBuilder().build();
-        
+	UsuarioBuilder usuarioBuilder = new UsuarioBuilder();
+	
+	TipoBuilder tipoBuilder = new TipoBuilder();
+	
+	Bolha bolha = new Bolha();
+	
+    Usuario usuario = usuarioBuilder.build();
+    Tipo tipo = tipoBuilder.build();
+    
+    public BolhaBuilder() {
+	}
+    
     public BolhaBuilder(String name) {
         bolha.setNome(name);
+        bolha.setDescricao("Test Unitario - Bolha Builder");
         bolha.setUsuarioCriacao(usuario);
         bolha.setTipo(tipo);
         bolha.setDtHoraCriacao(new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(new Date()));
