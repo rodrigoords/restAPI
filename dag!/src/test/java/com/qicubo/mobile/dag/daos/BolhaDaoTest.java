@@ -71,8 +71,7 @@ public class BolhaDaoTest {
 
         Bolha bolhaPersistida = bolhaDao.findById(bolha.getId());
 
-        Assert.assertEquals(bolha.getNome(), bolhaPersistida.getNome());
-        Assert.assertEquals(bolha.getDescricao(), bolhaPersistida.getDescricao());
+        Assert.assertEquals(bolha, bolhaPersistida);
     }
 
     @Test
