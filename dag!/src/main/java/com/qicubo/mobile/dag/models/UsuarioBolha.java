@@ -11,7 +11,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "dag.dag_usuario_bolha")
+@Table(name = "dag_usuario_bolha")
 public class UsuarioBolha implements Serializable {
 	private static final long serialVersionUID = 1L;
 	@EmbeddedId

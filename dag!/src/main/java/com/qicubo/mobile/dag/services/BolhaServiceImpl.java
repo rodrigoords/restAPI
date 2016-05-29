@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 import com.qicubo.mobile.dag.daos.BolhaDao;
 import com.qicubo.mobile.dag.models.Bolha;
 import com.qicubo.mobile.dag.models.Usuario;
+import com.qicubo.mobile.dag.types.Latitude;
+import com.qicubo.mobile.dag.types.Longitude;
 
 @Transactional
 @Service("bolhaService")
@@ -52,9 +54,8 @@ public class BolhaServiceImpl implements BolhaService {
 	}
 
 	@Override
-	public List<Bolha> findAllCloserBolhas(BigDecimal latitude, BigDecimal longitude) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Bolha> findAllCloserBolhas(Latitude latitude, Longitude longitude, BigDecimal index) {
+		return bolhaDao.findCloserBolhas(latitude, longitude, index);
 	}
 
 	@Override

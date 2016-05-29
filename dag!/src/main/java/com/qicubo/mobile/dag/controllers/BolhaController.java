@@ -20,6 +20,8 @@ import com.qicubo.mobile.dag.models.Usuario;
 import com.qicubo.mobile.dag.services.BolhaService;
 import com.qicubo.mobile.dag.services.TipoService;
 import com.qicubo.mobile.dag.services.UsuarioService;
+import com.qicubo.mobile.dag.types.Latitude;
+import com.qicubo.mobile.dag.types.Longitude;
 
 @RestController
 public class BolhaController {
@@ -54,9 +56,9 @@ public class BolhaController {
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, value = BolhaRestURIConstants.GET_BOLHA_IN_RANGE)
-	public ResponseEntity<List<Bolha>> getCloserBolhas(@PathVariable("lat, longi") BigDecimal lat, BigDecimal longi){
+	public ResponseEntity<List<Bolha>> getCloserBolhas(@PathVariable("lat, longi, index") Latitude lat, Longitude longi, BigDecimal index){
 		
-		List<Bolha> bolhas = bolhaService.findAllCloserBolhas(lat, longi);
+		List<Bolha> bolhas = bolhaService.findAllCloserBolhas(lat, longi, index);
 		
 		if (bolhas.isEmpty()) {
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
