@@ -6,10 +6,12 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
 import com.qicubo.mobile.dag.models.Usuario;
 
+@Component
 @Repository
 public class UsuarioDao {
 	
@@ -18,7 +20,7 @@ public class UsuarioDao {
 	
 	   public List<Usuario> all()
 	   {
-	      return manager.createQuery("select u from dag_usuario u", Usuario.class).getResultList();
+	      return manager.createQuery("select u from Usuario u", Usuario.class).getResultList();
 	   }
 
 	   public void save(Usuario user)

@@ -61,13 +61,13 @@ public class UsuarioServiceImpl implements UsuarioService {
 
 	@Override
 	public void update(Usuario usuario) {
-		// TODO Auto-generated method stub
+		usuarioDao.update(usuario);
 
 	}
 
 	@Override
 	public void deleteById(Long id) {
-		// TODO Auto-generated method stub
+		usuarioDao.remove(usuarioDao.findById(id));
 
 	}
 
