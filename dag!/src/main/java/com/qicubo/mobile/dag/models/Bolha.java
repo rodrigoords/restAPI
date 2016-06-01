@@ -1,5 +1,7 @@
 package com.qicubo.mobile.dag.models;
 
+import java.math.BigDecimal;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -33,6 +35,7 @@ public class Bolha {
 	private String dtHoraCriacao;
 	private Latitude latitude;
 	private Longitude longitude;
+	private BigDecimal indice; 
 	private Integer indRestrita;
 	
 	public Bolha(){
@@ -94,7 +97,15 @@ public class Bolha {
 		this.longitude = longitude;
 	}
 	
-	public Integer getIndRestrita() {
+	public BigDecimal getIndice() {
+        return indice;
+    }
+
+    public void setIndice(BigDecimal indice) {
+        this.indice = indice;
+    }
+
+    public Integer getIndRestrita() {
 		return indRestrita;
 	}
 	public void setIndRestrita(Integer indRestrita) {

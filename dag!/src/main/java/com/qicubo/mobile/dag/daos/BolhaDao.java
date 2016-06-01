@@ -5,7 +5,7 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
@@ -25,20 +25,20 @@ public class BolhaDao {
 		return manager.createQuery("select b from Bolha b", Bolha.class).getResultList();
 	}
 	
-	@SuppressWarnings("unchecked")
 	public List<Bolha> findBolhaByUsuario(Long id){
 		
-		Query query = manager.createQuery("select b from Bolha b "
-										+ "where id_usuario = :idUsuario");
+		TypedQuery<Bolha> query = manager.createQuery("select b from Bolha b "
+										+ "where id_usuario = :idUsuario", Bolha.class);
 		
         query.setParameter("idUsuario", id);
         return query.getResultList(); 
 	}
 	
-	@SuppressWarnings("unchecked")
     public List<Bolha> findCloserBolhas(Latitude latitude, Longitude longitude, BigDecimal index ){
 	    
-	    Query query = manager.createQuery("");
+	    TypedQuery<Bolha> query = manager.createQuery("select b "
+	                                    + "from bolha b "
+	                                    + "where indice = :index ", Bolha.class);
 	    
 	    query.setParameter("latitude", latitude);
 	    query.setParameter("longitude", longitude);
