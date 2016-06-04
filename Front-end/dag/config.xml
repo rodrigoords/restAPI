@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<widget id="com.ionicframework.dag862723" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+  <name>Dag!</name>
+  <description></description>
+  <author email="dev@dagapp.com.br" href="http://www.dagapp.com.br/">
+      Dag Aplicações Mobile 
+    </author>
+  <content src="index.html"/>
+  <access origin="*"/>
+  <preference name="Orientation" value="landscape" />
+  <preference name="webviewbounce" value="false"/>
+  <preference name="UIWebViewBounce" value="false"/>
+  <preference name="DisallowOverscroll" value="true"/>
+  <preference name="android-minSdkVersion" value="16"/>
+  <preference name="BackupWebStorage" value="none"/>
+
+  <!-- Ini: Splash Screen -->
+  <preference name="SplashScreen" value="img/bg-intro.png" />  <!-- defaults to "img/logo.png"  -->
+  <preference name="SplashScreenDelay" value="3000" /> <!-- defaults to "3000" -->
+  <preference name="SplashScreenBackgroundColor" value="green" /> <!-- defaults to "#464646" -->
+  <preference name="ShowSplashScreen" value="true" /> <!-- defaults to "true" -->
+  <preference name="SplashScreenWidth" value="600" /> <!-- defaults to "170" -->
+  <preference name="SplashScreenHeight" value="300" /> <!-- defaults to "200" -->
+  <preference name="AutoHideSplashScreen" value="true" />  
+  <preference name="ShowSplashScreenSpinner" value="false" />  
+  <preference name="FadeSplashScreen" value="true" />  
+  <preference name="FadeSplashScreenDuration" value="1.0" />
+  <!-- End: Splash Screen -->
+
+  <feature name="StatusBar">
+    <param name="ios-package" value="CDVStatusBar" onload="true"/>
+  </feature>
+</widget>

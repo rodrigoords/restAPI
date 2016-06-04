@@ -1,0 +1,53 @@
+<!-- /**
+ * Arquivo HTML do Menu Esquerdo
+ *
+ * @file Menu.html
+ * @authors André Queiroz, Rafael Mello e Rodrigo Sene
+ * @version 1.0
+ *
+ * @copyright 2016, Dag!
+ *
+ */ -->
+<ion-side-menus enable-menu-with-back-views="true">
+
+  <ion-side-menu-content>
+
+    <!-- Barra de navegação das páginas -->
+    <!--<ion-nav-bar class="bar-assertive bg-red-dag br-b-n ng-cloak" align-title="left" animation="nav-title-slide-ios7" no-tap-scroll="true">
+
+      <!--<ion-nav-back-button class="button-clear">
+        <i class="ion-chevron-left ph10"></i>
+      </ion-nav-back-button>
+
+      <ion-nav-buttons side="left">
+        <button class="button button-icon button-clear ion-navicon" menu-toggle="left">[Logo]</button>
+      </ion-nav-buttons>
+
+    </ion-nav-bar>-->
+
+    <ion-nav-view name="menuContent"></ion-nav-view>
+
+  </ion-side-menu-content>
+
+  <ion-side-menu side="left">
+    <ion-header-bar class="bar-stable">
+      <h1 class="title">Left</h1>
+    </ion-header-bar>
+    <ion-content>
+      <ion-list>
+        <ion-item menu-close>
+          Login
+        </ion-item>
+        <ion-item menu-close href="#/app/intro">
+          Search
+        </ion-item>
+        <ion-item menu-close href="#/app/intro">
+          Browse
+        </ion-item>
+        <ion-item menu-close href="#/app/intro">
+          Playlists
+        </ion-item>
+      </ion-list>
+    </ion-content>
+  </ion-side-menu>
+</ion-side-menus>
