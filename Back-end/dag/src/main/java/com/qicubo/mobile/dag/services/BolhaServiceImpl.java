@@ -1,6 +1,7 @@
 package com.qicubo.mobile.dag.services;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -11,12 +12,15 @@ import org.springframework.stereotype.Service;
 import com.qicubo.mobile.dag.daos.BolhaDao;
 import com.qicubo.mobile.dag.models.Bolha;
 import com.qicubo.mobile.dag.models.Usuario;
+import com.qicubo.mobile.dag.types.Index;
 import com.qicubo.mobile.dag.types.Latitude;
 import com.qicubo.mobile.dag.types.Longitude;
 
 @Transactional
 @Service("bolhaService")
 public class BolhaServiceImpl implements BolhaService {
+    
+    private static final BigDecimal PERIMETRO_BOLHA_KM = new BigDecimal(50);
 
 	@Autowired
 	private BolhaDao bolhaDao;
@@ -54,8 +58,21 @@ public class BolhaServiceImpl implements BolhaService {
 	}
 
 	@Override
-	public List<Bolha> findAllCloserBolhas(Latitude latitude, Longitude longitude, BigDecimal index) {
-		return bolhaDao.findCloserBolhas(latitude, longitude, index);
+	public List<Bolha> findAllCloserBolhas(Latitude latitude, Longitude longitude, Index index) {
+		
+	    BigDecimal distancia;
+
+	    List<Bolha> bolhas = new ArrayList<>();
+	    
+	    for ( Bolha bolha : bolhaDao.findCloserBolhas(index) ){
+	        distancia = bolha.distancia(latitude, longitude, "K");
+	        
+	        if (distancia.compareTo(PERIMETRO_BOLHA_KM) <= 0 ){
+	            bolhas.add(bolha);
+	        }
+	    }
+	    
+	    return bolhas;
 	}
 
 	@Override

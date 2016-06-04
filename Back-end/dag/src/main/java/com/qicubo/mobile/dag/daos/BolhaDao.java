@@ -1,6 +1,5 @@
 package com.qicubo.mobile.dag.daos;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -11,8 +10,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
 import com.qicubo.mobile.dag.models.Bolha;
-import com.qicubo.mobile.dag.types.Latitude;
-import com.qicubo.mobile.dag.types.Longitude;
+import com.qicubo.mobile.dag.types.Index;
 
 @Component
 @Repository
@@ -34,15 +32,20 @@ public class BolhaDao {
         return query.getResultList(); 
 	}
 	
-    public List<Bolha> findCloserBolhas(Latitude latitude, Longitude longitude, BigDecimal index ){
+	/**
+	 * Retorna as bolhas que estão próximas de acordo com o indice informado, 
+	 * esse indice é calculado através da latitude e longitude quando a bolha é criada.
+	 * @param index
+	 * @return
+	 */
+    public List<Bolha> findCloserBolhas(Index index ){
 	    
 	    TypedQuery<Bolha> query = manager.createQuery("select b "
 	                                    + "from bolha b "
-	                                    + "where indice = :index ", Bolha.class);
+	                                    + "where indice between :indexA and indexB ", Bolha.class);
 	    
-	    query.setParameter("latitude", latitude);
-	    query.setParameter("longitude", longitude);
-	    query.setParameter("index", index);
+	    query.setParameter("indexA", index);
+	    query.setParameter("indexB", index);
 	    
 	    return query.getResultList();
 	}

@@ -22,13 +22,17 @@ public class BolhaBuilder {
     Tipo tipo = tipoBuilder.build();
     
     public BolhaBuilder(String name) {
+        Latitude latitude = new Latitude("-22.815504");
+        Longitude longitude = new Longitude("-47.045347");
+        
         bolha.setNome(name);
         bolha.setDescricao("Test Unitario - Bolha Builder");
         bolha.setUsuarioCriacao(usuario);
         bolha.setTipo(tipo);
         bolha.setDtHoraCriacao(new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(new Date()));
-        bolha.setLatitude(new Latitude("-22.815504"));
-        bolha.setLongitude(new Longitude("-47.045347"));
+        bolha.setLatitude(latitude);
+        bolha.setLongitude(longitude);
+        bolha.setIndice(latitude.indexValue().add(longitude.indexValue()));
         bolha.setIndRestrita(0);
     }
     

@@ -13,6 +13,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.qicubo.mobile.dag.types.Index;
 import com.qicubo.mobile.dag.types.Latitude;
 import com.qicubo.mobile.dag.types.Longitude;
 
@@ -35,7 +36,7 @@ public class Bolha {
 	private String dtHoraCriacao;
 	private Latitude latitude;
 	private Longitude longitude;
-	private BigDecimal indice; 
+	private Index indice; 
 	private Integer indRestrita;
 	
 	public Bolha(){
@@ -97,11 +98,11 @@ public class Bolha {
 		this.longitude = longitude;
 	}
 	
-	public BigDecimal getIndice() {
+	public Index getIndice() {
         return indice;
     }
 
-    public void setIndice(BigDecimal indice) {
+    public void setIndice(Index indice) {
         this.indice = indice;
     }
 
@@ -111,5 +112,43 @@ public class Bolha {
 	public void setIndRestrita(Integer indRestrita) {
 		this.indRestrita = indRestrita;
 	}
+	
+	/**
+	 * Retorna a distancia da bolha em relação a os pontos passados como parametros, a unidade de retorno sera 
+	 * de acordo com o parametro unit;
+	 * @param latPointA
+	 * @param longPointB
+	 * @param unit : K - kilometros, N - Milhas Nauticas, M - Milhas
+	 * @return
+	 */
+	public BigDecimal distancia(Latitude latPointA, Longitude longPointA, String unit){
+	    
+	    double latPointARadius = deg2rad(latPointA.doubleValue());
+	    double longPointARadius = deg2rad(longPointA.doubleValue());
+	    
+	    double latPointBRadius = deg2rad(this.latitude.doubleValue());
+	    double longPointBRadius = deg2rad(this.longitude.doubleValue());
+	    
+        double theta = longPointARadius - longPointBRadius;
+        double dist = Math.sin(latPointARadius) * Math.sin(deg2rad(latPointBRadius)) + Math.cos(latPointARadius) * Math.cos(latPointBRadius) * Math.cos(deg2rad(theta));
+        dist = Math.acos(dist);
+        dist = rad2deg(dist);
+        dist = dist * 60 * 1.1515;
+        if (unit == "K") {
+            dist = dist * 1.609344;
+        } else if (unit == "N") {
+            dist = dist * 0.8684;
+        }
+        
+        return BigDecimal.valueOf(dist);
+	}
+	
+    private double deg2rad(double deg){
+        return (deg * Math.PI / 180.0);
+    }
+    
+    private double rad2deg(double rad) {
+        return (rad * 180 / Math.PI);
+    }
 
 }
