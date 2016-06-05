@@ -14,7 +14,7 @@ public class Index extends Number{
      */
     private static final long serialVersionUID = -5539760635308261633L;
     
-    @Column(name="indice", nullable = false, precision = 4, scale = 1)
+    @Column(name="indice", nullable = false, precision = 4, scale = 0)
     private BigDecimal index;
     
     /* JPA Context */
@@ -23,7 +23,7 @@ public class Index extends Number{
     }
     
     public Index(String index) {
-        this.index = new BigDecimal(index).setScale(1, RoundingMode.DOWN);
+        this.index = new BigDecimal(index).setScale(0, RoundingMode.DOWN);
     }
 
     public BigDecimal getIndex() {

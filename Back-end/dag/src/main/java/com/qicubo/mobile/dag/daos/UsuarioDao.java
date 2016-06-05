@@ -3,8 +3,9 @@ package com.qicubo.mobile.dag.daos;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
@@ -33,13 +34,13 @@ public class UsuarioDao {
 	      return manager.find(Usuario.class, id);
 	   }
 	   
-	   public Usuario findByLogin(String login) throws Exception{
+	   public Usuario findByLogin(String login) throws NoResultException{
 		   	
-		   Query query = manager.createQuery("select u from Usuario u "
-		   									+ "where u.login = :login");
+		   TypedQuery<Usuario> query = manager.createQuery("select u from Usuario u "
+		   									+ "where u.login = :login", Usuario.class);
 		   query.setParameter("login", login);	
 		   
-	       return (Usuario) query.getSingleResult(); 
+	       return query.getSingleResult(); 
 	   }
 	   
 	   public void remove(Usuario user)

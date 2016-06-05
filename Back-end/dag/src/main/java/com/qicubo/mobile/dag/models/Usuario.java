@@ -12,23 +12,23 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "dag_usuario")
 public class Usuario {
-	
+    
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name="id_usuario")
+    private Long id;
+    private String login;
+    private String nome;
+    private String sobreNome;
+    private String email;
+    private String senha;
+    
+    /*JAP contex*/
 	public Usuario() {
 	}
 	public Usuario(String login) {
 		this.login = login;
 	}
-	
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name="id_usuario")
-	private Long id;
-	private String login;
-	private String nome;
-	private String sobreNome;
-	private String email;
-	private String senha;
-	
 	@OneToOne
 	@JoinColumn(name = "id_usuario")
 	public Long getId() {

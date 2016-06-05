@@ -55,7 +55,7 @@ public class TipoDaoTest {
     }
 
     @Test
-    public void findTipoByName() {
+    public void findTipoByName() throws Exception {
 
         tipo = new TipoBuilder().build();
 
