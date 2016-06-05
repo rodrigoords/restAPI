@@ -1,6 +1,7 @@
 package com.qicubo.mobile.dag.models;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -39,6 +40,7 @@ public class Bolha {
 	private Index indice; 
 	private Integer indRestrita;
 	
+	/*JPA Context*/
 	public Bolha(){
 	}
 	
@@ -89,6 +91,7 @@ public class Bolha {
 	}
 	public void setLatitude(Latitude latitude) {
 		this.latitude = latitude;
+	    ajustaIndice();
 	}
 	
 	public Longitude getLongitude() {
@@ -96,6 +99,7 @@ public class Bolha {
 	}
 	public void setLongitude(Longitude longitude) {
 		this.longitude = longitude;
+        ajustaIndice();
 	}
 	
 	public Index getIndice() {
@@ -121,16 +125,16 @@ public class Bolha {
 	 * @param unit : K - kilometros, N - Milhas Nauticas, M - Milhas
 	 * @return
 	 */
-	public BigDecimal distancia(Latitude latPointA, Longitude longPointA, String unit){
+	public BigDecimal distancia(Latitude pointLat, Longitude pointLong, String unit){
 	    
-	    double latPointARadius = deg2rad(latPointA.doubleValue());
-	    double longPointARadius = deg2rad(longPointA.doubleValue());
+	    double latPointRadius = deg2rad(pointLat.doubleValue());
+	    double longPointRadius = deg2rad(pointLong.doubleValue());
 	    
 	    double latPointBRadius = deg2rad(this.latitude.doubleValue());
 	    double longPointBRadius = deg2rad(this.longitude.doubleValue());
 	    
-        double theta = longPointARadius - longPointBRadius;
-        double dist = Math.sin(latPointARadius) * Math.sin(deg2rad(latPointBRadius)) + Math.cos(latPointARadius) * Math.cos(latPointBRadius) * Math.cos(deg2rad(theta));
+        double theta = longPointRadius - longPointBRadius;
+        double dist = Math.sin(latPointRadius) * Math.sin(latPointBRadius) + Math.cos(latPointRadius) * Math.cos(latPointBRadius) * Math.cos(deg2rad(theta));
         dist = Math.acos(dist);
         dist = rad2deg(dist);
         dist = dist * 60 * 1.1515;
@@ -140,15 +144,21 @@ public class Bolha {
             dist = dist * 0.8684;
         }
         
-        return BigDecimal.valueOf(dist);
+        return BigDecimal.valueOf(dist).setScale(3, RoundingMode.HALF_DOWN);
 	}
 	
     private double deg2rad(double deg){
-        return (deg * Math.PI / 180.0);
+        return deg * Math.PI / 180.0;
     }
     
     private double rad2deg(double rad) {
-        return (rad * 180 / Math.PI);
+        return rad * 180 / Math.PI;
+    }
+    
+    private void ajustaIndice(){
+        if (indice != null){
+            indice =  latitude.indexValue().add(longitude.indexValue());
+        }
     }
 
 }

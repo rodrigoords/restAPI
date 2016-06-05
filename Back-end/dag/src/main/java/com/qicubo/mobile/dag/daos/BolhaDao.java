@@ -41,11 +41,10 @@ public class BolhaDao {
     public List<Bolha> findCloserBolhas(Index index ){
 	    
 	    TypedQuery<Bolha> query = manager.createQuery("select b "
-	                                    + "from bolha b "
-	                                    + "where indice between :indexA and indexB ", Bolha.class);
+	                                    + "from Bolha b "
+	                                    + "where b.indice = :index ", Bolha.class);
 	    
-	    query.setParameter("indexA", index);
-	    query.setParameter("indexB", index);
+	    query.setParameter("index", index);
 	    
 	    return query.getResultList();
 	}

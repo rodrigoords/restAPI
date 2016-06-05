@@ -1,5 +1,6 @@
 package com.qicubo.mobile.dag.daos;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -16,6 +17,8 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import com.qicubo.mobile.dag.Boot;
 import com.qicubo.mobile.dag.builders.BolhaBuilder;
 import com.qicubo.mobile.dag.models.Bolha;
+import com.qicubo.mobile.dag.types.Latitude;
+import com.qicubo.mobile.dag.types.Longitude;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Boot.class)
@@ -106,4 +109,46 @@ public class BolhaDaoTest {
         
         Assert.assertEquals(descricaoTest, bolha.getDescricao());
     }
+    
+    @Test
+    public void findCloserBolhasAllClose(){
+        
+        bolha = new BolhaBuilder("Test Index").build();
+        Bolha bolha2 = new BolhaBuilder("Test Index 2").build();
+        
+        BigDecimal latitudeNova = bolha2.getLatitude().bigDecimalValue().add(new BigDecimal(0.002));
+        BigDecimal longitudeNova = bolha2.getLongitude().bigDecimalValue().add(new BigDecimal(0.002));
+        
+        bolha2.setLatitude(new Latitude(latitudeNova.toString()));
+        bolha2.setLongitude(new Longitude(longitudeNova.toString()));
+        
+        bolhaDao.save(bolha);
+        bolhaDao.save(bolha2);
+        
+        List<Bolha> bolhas = bolhaDao.findCloserBolhas(bolha.getIndice());
+        
+        Assert.assertEquals(2, bolhas.size());
+        
+    }
+    
+    @Test
+    public void findCloserBolhasNotAllClose(){
+        
+        bolha = new BolhaBuilder("Test Index").build();
+        Bolha bolha2 = new BolhaBuilder("Test Index 2").build();
+        
+        BigDecimal latitudeNova = bolha2.getLatitude().bigDecimalValue().add(new BigDecimal("2.002"));
+        BigDecimal longitudeNova = bolha2.getLongitude().bigDecimalValue().add(new BigDecimal("2.002"));
+        
+        bolha2.setLatitude(new Latitude(latitudeNova.toString()));
+        bolha2.setLongitude(new Longitude(longitudeNova.toString()));
+        
+        bolhaDao.save(bolha);
+        bolhaDao.save(bolha2);
+        
+        List<Bolha> bolhas = bolhaDao.findCloserBolhas(bolha.getIndice());
+        
+        Assert.assertEquals(1, bolhas.size());
+    }
+    
 }
