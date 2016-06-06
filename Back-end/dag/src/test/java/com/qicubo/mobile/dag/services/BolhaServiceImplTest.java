@@ -17,7 +17,6 @@ import com.qicubo.mobile.dag.Boot;
 import com.qicubo.mobile.dag.builders.BolhaBuilder;
 import com.qicubo.mobile.dag.daos.BolhaDao;
 import com.qicubo.mobile.dag.models.Bolha;
-import com.qicubo.mobile.dag.types.Index;
 import com.qicubo.mobile.dag.types.Latitude;
 import com.qicubo.mobile.dag.types.Longitude;
 
@@ -56,8 +55,6 @@ public class BolhaServiceImplTest {
         Longitude longitudePoint = new Longitude("-47.210201");
         Longitude longitudeBolha = new Longitude("-47.214559");
         
-        Index indicePoint = latitudePoint.indexValue().add(longitudePoint.indexValue());
-        
         bolha = new BolhaBuilder("Bolha").build();
         
         bolha.setLatitude(latitudeBolha);
@@ -66,7 +63,7 @@ public class BolhaServiceImplTest {
         
         bolhaDao.save(bolha);
         
-        List<Bolha> bolhas = bolhaService.findAllCloserBolhas(latitudePoint, longitudePoint, indicePoint);
+        List<Bolha> bolhas = bolhaService.findAllCloserBolhas(latitudePoint, longitudePoint);
         
         Assert.assertEquals(1, bolhas.size());
     }
@@ -79,8 +76,6 @@ public class BolhaServiceImplTest {
         Longitude longitudePoint = new Longitude("-47.210201");
         Longitude longitudeBolha = new Longitude("-46.634875");
         
-        Index indicePoint = latitudePoint.indexValue().add(longitudePoint.indexValue());
-        
         bolha = new BolhaBuilder("Bolha").build();
         
         bolha.setLatitude(latitudeBolha);
@@ -88,7 +83,7 @@ public class BolhaServiceImplTest {
        
         bolhaDao.save(bolha);
         
-        List<Bolha> bolhas = bolhaService.findAllCloserBolhas(latitudePoint, longitudePoint, indicePoint);
+        List<Bolha> bolhas = bolhaService.findAllCloserBolhas(latitudePoint, longitudePoint);
         
         Assert.assertEquals(0, bolhas.size());        
     }

@@ -58,13 +58,14 @@ public class BolhaServiceImpl implements BolhaService {
 	}
 
 	@Override
-	public List<Bolha> findAllCloserBolhas(Latitude latitude, Longitude longitude, Index index) {
+	public List<Bolha> findAllCloserBolhas(Latitude latitude, Longitude longitude) {
 		
 	    BigDecimal distancia;
-
+	    Index indice = latitude.indexValue().add(longitude.indexValue());
+	    
 	    List<Bolha> bolhas = new ArrayList<>();
 	    
-	    for ( Bolha bolha : bolhaDao.findCloserBolhas(index) ){
+	    for ( Bolha bolha : bolhaDao.findCloserBolhas(indice) ){
 	        distancia = bolha.distancia(latitude, longitude, "K");
 	        
 	        if (distancia.compareTo(PERIMETRO_BOLHA_KM) <= 0 ){

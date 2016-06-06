@@ -56,9 +56,9 @@ public class BolhaController {
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, value = BolhaRestURIConstants.GET_BOLHA_IN_RANGE)
-	public ResponseEntity<List<Bolha>> getCloserBolhas(@PathVariable("lat, longi, index") Latitude lat, Longitude longi, Index index){
+	public ResponseEntity<List<Bolha>> getCloserBolhas(@PathVariable("lat, longi, index") Latitude lat, Longitude longi){
 		
-		List<Bolha> bolhas = bolhaService.findAllCloserBolhas(lat, longi, index);
+		List<Bolha> bolhas = bolhaService.findAllCloserBolhas(lat, longi);
 		
 		if (bolhas.isEmpty()) {
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
