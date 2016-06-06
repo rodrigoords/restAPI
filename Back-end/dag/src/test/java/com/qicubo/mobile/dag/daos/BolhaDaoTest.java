@@ -54,6 +54,15 @@ public class BolhaDaoTest {
 
         Assert.assertEquals(bolha, bolhaPersistida);
     }
+    
+    @Test
+    public void findBolhaByIdNotExists() {
+        Long idTest = 9999L;
+        
+        Bolha bolhaPersistida = bolhaDao.findById(idTest);
+
+        Assert.assertEquals( null , bolhaPersistida);
+    }
 
     @Test
     public void findBolhaByUsuario() {
@@ -63,6 +72,15 @@ public class BolhaDaoTest {
         List<Bolha> bolhas = bolhaDao.findBolhaByUsuario(bolha.getUsuarioCriacao().getId());
 
         Assert.assertEquals(bolha, bolhas.get(0));
+    }
+    
+    @Test
+    public void findBolhaByUsuarioNotExist() {
+        bolha = new BolhaBuilder("Test Not Exist").build();
+
+        List<Bolha> bolhas = bolhaDao.findBolhaByUsuario(bolha.getUsuarioCriacao().getId());
+
+        Assert.assertEquals(0, bolhas.size());
     }
 
     @Test
