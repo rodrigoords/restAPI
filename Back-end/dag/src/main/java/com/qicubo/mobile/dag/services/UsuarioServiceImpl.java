@@ -1,6 +1,8 @@
 package com.qicubo.mobile.dag.services;
 
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.persistence.NoResultException;
 import javax.transaction.Transactional;
@@ -14,7 +16,7 @@ import com.qicubo.mobile.dag.models.Usuario;
 @Transactional
 @Service("usuarioService")
 public class UsuarioServiceImpl implements UsuarioService {
-
+    private static final Logger log = Logger.getLogger(UsuarioService.class.getName());
 	@Autowired
 	UsuarioDao usuarioDao;
 	
@@ -23,10 +25,11 @@ public class UsuarioServiceImpl implements UsuarioService {
 		Usuario user = new Usuario();
 		try {
 			user = usuarioDao.findByLogin(login);
-		} catch (NoResultException e) {
+		} catch (NoResultException ex) {
+		    log.log(Level.INFO, "No data found in find by login query", ex);
 			user = null;
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (Exception ex) {
+			log.log(Level.SEVERE, ex.toString(), ex);
 		}
 		return user;
 	}
@@ -37,9 +40,10 @@ public class UsuarioServiceImpl implements UsuarioService {
 		try {
 			usuarioDao.findByLogin(usuario.getLogin());
 		}catch(NoResultException ex){
+		    log.log(Level.INFO, "No data found in find by login query", ex);
 			retorno = false;
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (Exception ex) {
+		    log.log(Level.SEVERE, ex.toString(), ex);
 		}
 		return retorno;
 	};

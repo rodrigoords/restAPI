@@ -15,7 +15,7 @@ public class Index extends Number{
     private static final long serialVersionUID = -5539760635308261633L;
     
     @Column(name="indice", nullable = false, precision = 4, scale = 0)
-    private BigDecimal index;
+    private BigDecimal indice;
     
     /* JPA Context */
     public Index(){
@@ -23,61 +23,59 @@ public class Index extends Number{
     }
     
     public Index(String index) {
-        this.index = new BigDecimal(index).setScale(0, RoundingMode.DOWN);
+        this.indice = new BigDecimal(index).setScale(0, RoundingMode.DOWN);
     }
 
     public BigDecimal getIndex() {
-        return index;
+        return indice;
     }
 
     public void setIndex(BigDecimal index) {
-        this.index = index;
+        this.indice = index;
     }
 
     @Override
     public int intValue() {
-        return index.intValue();
+        return indice.intValue();
     }
 
     @Override
     public long longValue() {
-        return index.longValue();
+        return indice.longValue();
     }
 
     @Override
     public float floatValue() {
-        return index.floatValue();
+        return indice.floatValue();
     }
 
     @Override
     public double doubleValue() {
-        return index.doubleValue();
+        return indice.doubleValue();
     }
     
     @Override
     public String toString(){
-        return index.toString();
+        return indice.toString();
     }
     
     public BigDecimal bigDecimalValue(){
-        return index;
+        return indice;
     }
     
     public Index subtract(Index subtrahend){
         
         BigDecimal subtractElement = new BigDecimal(subtrahend.toString());
         
-        Index indexResult = new Index (this.bigDecimalValue().subtract(subtractElement).toString());
+        return new Index (this.bigDecimalValue().subtract(subtractElement).toString());
         
-        return indexResult;
     }
     
     public Index add(Index addTerm){
         BigDecimal addBigDecimalTerm = new BigDecimal(addTerm.toString());
         
-        Index indexResult = new Index (this.bigDecimalValue().add(addBigDecimalTerm).toString());
+        return new Index (this.bigDecimalValue().add(addBigDecimalTerm).toString());
         
-        return indexResult;
     }
 
 }

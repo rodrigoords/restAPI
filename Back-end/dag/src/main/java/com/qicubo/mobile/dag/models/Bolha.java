@@ -40,7 +40,6 @@ public class Bolha {
 	private Index indice; 
 	private Integer indRestrita;
 	
-	/*JPA Context*/
 	public Bolha(){
 	}
 	

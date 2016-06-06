@@ -1,6 +1,8 @@
 package com.qicubo.mobile.dag.services;
 
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.persistence.NoResultException;
 
@@ -12,6 +14,8 @@ import com.qicubo.mobile.dag.models.Tipo;
 
 @Service("tipoService")
 public class TipoServiceImpl implements TipoService {
+    private static final Logger log = Logger.getLogger(TipoService.class.getName());
+
     @Autowired
     private TipoDao tipoDao;
 
@@ -26,9 +30,10 @@ public class TipoServiceImpl implements TipoService {
         try {
             tipo = tipoDao.findByNome(name);
         } catch (NoResultException e) {
+            log.log(Level.INFO, "No data found in find by name query", e);
             tipo = null;
         } catch (Exception e) {
-            e.printStackTrace();
+            log.log(Level.SEVERE, e.toString(), e);
         }
         return tipo;
     }
@@ -44,9 +49,11 @@ public class TipoServiceImpl implements TipoService {
         try {
             tipoDao.findByNome(tipo.getNome());
         } catch (NoResultException e) {
+            log.log(Level.INFO, "No data found in find by name query", e);
             exists = false;
         } catch (Exception e) {
-            e.printStackTrace();
+
+            log.log(Level.SEVERE, e.toString(), e);
         }
         return exists;
     }

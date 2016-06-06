@@ -34,7 +34,7 @@ public class BolhaController {
 	private TipoService tipoService; 
 
 	
-	@RequestMapping(method = RequestMethod.GET, value = BolhaRestURIConstants.GET_ALL_BOLHA)
+	@RequestMapping(method = RequestMethod.GET, value = BolhaRestURIConstants.GET_ALL_BOLHAS)
 	public ResponseEntity<List<Bolha>> list() {
 
 		List<Bolha> bolhas = bolhaService.findAll();
@@ -72,7 +72,11 @@ public class BolhaController {
 	public ResponseEntity<List<Bolha>> getBolhaByUser(@PathVariable("login") String login) {
 
 		Usuario user = usuarioService.findByLogin(login);
-
+		
+		if (user == null){
+		    return new ResponseEntity<>(HttpStatus.FAILED_DEPENDENCY);
+		}
+		
 		List<Bolha> bolhas = bolhaService.findBolhaByUser(user);
 		if (bolhas.isEmpty()) {
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
