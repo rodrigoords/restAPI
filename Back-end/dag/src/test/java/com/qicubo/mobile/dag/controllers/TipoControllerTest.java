@@ -10,31 +10,24 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.SpringApplicationConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
+import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.context.WebApplicationContext;
 
-import com.qicubo.mobile.dag.Boot;
 import com.qicubo.mobile.dag.builders.TipoBuilder;
 import com.qicubo.mobile.dag.models.Tipo;
 import com.qicubo.mobile.dag.services.TipoService;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = Boot.class)
-@WebAppConfiguration
+@RunWith(MockitoJUnitRunner.class)
 public class TipoControllerTest {
-
-
-	@Autowired
-	private WebApplicationContext context;
-
+    
+    @InjectMocks
+    private TipoController tipoController;
+    
 	@Mock
 	private TipoService tipoService;
 	
@@ -47,7 +40,7 @@ public class TipoControllerTest {
 		
 		MockitoAnnotations.initMocks(this);
 		
-		mockMvc = MockMvcBuilders.webAppContextSetup(context).build();
+		mockMvc = MockMvcBuilders.standaloneSetup(tipoController).build();
 
 		Tipo tipoA = new TipoBuilder("Balada").build();
 		Tipo tipoB = new TipoBuilder("Estudos").build();
