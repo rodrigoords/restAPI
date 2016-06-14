@@ -31,6 +31,8 @@ public class TipoControllerTest {
 	@Mock
 	private TipoService tipoService;
 	
+	private Tipo tipo;
+	
 	private MockMvc mockMvc;
 	
 	private List<Tipo> listaTipos = new ArrayList<>();
@@ -51,7 +53,7 @@ public class TipoControllerTest {
 	}
 
 	@Test
-	public void findAllTipos() throws Exception {
+	public void getAllTipos() throws Exception {
 		Mockito.when(tipoService.findAll()).thenReturn(listaTipos);
 		//
 		mockMvc.perform(get(TipoRestURIConstants.GET_ALL_TIPOS)).andExpect(status().isOk());
@@ -59,5 +61,43 @@ public class TipoControllerTest {
 		Mockito.verify(tipoService, Mockito.times(1)).findAll();
 		Mockito.verifyNoMoreInteractions(tipoService);
 	}
+	
+	@Test
+	public void getAllTiposNoContent() throws Exception{
+		Mockito.when(tipoService.findAll()).thenReturn(new ArrayList<Tipo>());
+		//
+		mockMvc.perform(get(TipoRestURIConstants.GET_ALL_TIPOS)).andExpect(status().isNoContent());
+		//
+		Mockito.verify(tipoService, Mockito.times(1)).findAll();
+		Mockito.verifyNoMoreInteractions(tipoService);
+	}
+	
+	@Test
+	public void getTipoById() throws Exception{
+		
+		tipo = new TipoBuilder("Balada").build();
+		tipo.setId(1L);
+		
+		Mockito.when(tipoService.findById(tipo.getId())).thenReturn(tipo);
+		
+		mockMvc.perform(get(TipoRestURIConstants.GET_TIPO_BY_ID, tipo.getId())).andExpect(status().isOk());
+		
+		Mockito.verify(tipoService, Mockito.times(1)).findById(tipo.getId());
+		Mockito.verifyNoMoreInteractions(tipoService);
+	}
+	
+	@Test
+	public void getTipoByIdNoContent() throws Exception{
+		
+		tipo = new TipoBuilder("Balada").build();
+		tipo.setId(1L);
+		Mockito.when(tipoService.findById(tipo.getId())).thenReturn(null);
+		
+		mockMvc.perform(get(TipoRestURIConstants.GET_TIPO_BY_ID, tipo.getId())).andExpect(status().isNoContent());
+		
+		Mockito.verify(tipoService, Mockito.times(1)).findById(tipo.getId());
+		Mockito.verifyNoMoreInteractions(tipoService);
+	}
+	
 
 }
