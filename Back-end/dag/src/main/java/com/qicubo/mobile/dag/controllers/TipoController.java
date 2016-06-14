@@ -35,7 +35,7 @@ public class TipoController {
 	public ResponseEntity<Tipo> getTipoById(@PathVariable("id") Long id) {
 		Tipo tipo = tipoService.findById(id);
 		if (tipo == null){
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		}
 		return new ResponseEntity<>(tipo, HttpStatus.OK);
 	}

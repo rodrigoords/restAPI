@@ -1,12 +1,14 @@
 package com.qicubo.mobile.dag.controllers;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -47,6 +49,10 @@ public class TipoControllerTest {
 		Tipo tipoA = new TipoBuilder("Balada").build();
 		Tipo tipoB = new TipoBuilder("Estudos").build();
 		Tipo tipoC = new TipoBuilder("Esporte").build();
+		
+		tipoA.setId(1L);
+		tipoB.setId(2L);
+		tipoC.setId(3L);
 
 		listaTipos.addAll(Arrays.asList(tipoA, tipoB, tipoC));
 
@@ -56,7 +62,17 @@ public class TipoControllerTest {
 	public void getAllTipos() throws Exception {
 		Mockito.when(tipoService.findAll()).thenReturn(listaTipos);
 		//
-		mockMvc.perform(get(TipoRestURIConstants.GET_ALL_TIPOS)).andExpect(status().isOk());
+		mockMvc.perform(get(TipoRestURIConstants.GET_ALL_TIPOS)).andExpect(status().isOk())
+																.andExpect(jsonPath("$", Matchers.hasSize(3)))
+																.andExpect(jsonPath("$[*].id", Matchers.containsInAnyOrder(listaTipos.get(0).getId().intValue(),
+																														   listaTipos.get(1).getId().intValue(),
+																														   listaTipos.get(2).getId().intValue())))
+																.andExpect(jsonPath("$[*].nome", Matchers.containsInAnyOrder(listaTipos.get(0).getNome(),
+																															 listaTipos.get(1).getNome(),
+																															 listaTipos.get(2).getNome())))
+																.andExpect(jsonPath("$[*].descricao", Matchers.containsInAnyOrder(listaTipos.get(0).getDescricao(),
+																																  listaTipos.get(1).getDescricao(),
+																																  listaTipos.get(2).getDescricao())));
 		//
 		Mockito.verify(tipoService, Mockito.times(1)).findAll();
 		Mockito.verifyNoMoreInteractions(tipoService);
@@ -80,7 +96,11 @@ public class TipoControllerTest {
 		
 		Mockito.when(tipoService.findById(tipo.getId())).thenReturn(tipo);
 		
-		mockMvc.perform(get(TipoRestURIConstants.GET_TIPO_BY_ID, tipo.getId())).andExpect(status().isOk());
+		mockMvc.perform(get(TipoRestURIConstants.GET_TIPO_BY_ID, tipo.getId()))
+										        .andExpect(status().isOk())
+										        .andExpect(jsonPath("$.id", Matchers.is(tipo.getId().intValue())))
+										        .andExpect(jsonPath("$.nome", Matchers.is(tipo.getNome())))
+										        .andExpect(jsonPath("$.descricao", Matchers.is(tipo.getDescricao())));
 		
 		Mockito.verify(tipoService, Mockito.times(1)).findById(tipo.getId());
 		Mockito.verifyNoMoreInteractions(tipoService);
