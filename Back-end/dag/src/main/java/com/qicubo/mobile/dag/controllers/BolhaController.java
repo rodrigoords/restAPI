@@ -35,7 +35,7 @@ public class BolhaController {
     private TipoService tipoService;
 
     @RequestMapping(method = RequestMethod.GET, value = BolhaRestURIConstants.GET_ALL_BOLHAS)
-    public ResponseEntity<List<Bolha>> list() {
+    public ResponseEntity<List<Bolha>> getAllBolhas() {
 
         List<Bolha> bolhas = bolhaService.findAll();
 
@@ -50,14 +50,14 @@ public class BolhaController {
     public ResponseEntity<Bolha> getBolhaById(@PathVariable("id") Long id) {
         Bolha bolha = bolhaService.findById(id);
         if (bolha == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
         return new ResponseEntity<>(bolha, HttpStatus.OK);
     }
 
     @RequestMapping(method = RequestMethod.GET, value = BolhaRestURIConstants.GET_BOLHA_IN_RANGE)
     public ResponseEntity<List<Bolha>> getCloserBolhas(@RequestParam(value = "latitude", required = true) Latitude lat,
-            @RequestParam(value = "longitude", required = true) Longitude longi) {
+            										   @RequestParam(value = "longitude", required = true) Longitude longi) {
 
         List<Bolha> bolhas = bolhaService.findAllCloserBolhas(lat, longi);
 

@@ -15,7 +15,6 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -33,17 +32,15 @@ public class TipoControllerTest {
 	@Mock
 	private TipoService tipoService;
 	
-	private Tipo tipo;
-	
 	private MockMvc mockMvc;
+	
+	private Tipo tipo;
 	
 	private List<Tipo> listaTipos = new ArrayList<>();
 
 	@Before
 	public void setUp() {
-		
-		MockitoAnnotations.initMocks(this);
-		
+				
 		mockMvc = MockMvcBuilders.standaloneSetup(tipoController).build();
 
 		Tipo tipoA = new TipoBuilder("Balada").build();
