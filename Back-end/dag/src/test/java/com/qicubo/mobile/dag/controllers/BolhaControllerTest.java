@@ -16,6 +16,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
@@ -189,29 +190,32 @@ public class BolhaControllerTest {
 		Mockito.verifyNoMoreInteractions(usuarioService);		
 	}
 	
-/*	@Test
+	@Test
 	public void getCloserBolhas() throws Exception{
 		
 		Latitude latitudeTest = new Latitude("-22.222222");
 		Longitude longitudeTest = new Longitude("-47.777777");
 		
+		ReflectionTestUtils.setField(bolhaController, "latitude", latitudeTest);
+		ReflectionTestUtils.setField(bolhaController, "longitude", longitudeTest);
+		
 		Mockito.when(bolhaService.findAllCloserBolhas(latitudeTest, longitudeTest)).thenReturn(listaBolhas);
 		
 		mockMvc.perform(get(BolhaRestURIConstants.GET_BOLHA_IN_RANGE)
-												 .param("latitude", latitudeTest.toString())
-												 .param("longitude", longitudeTest.toString()) 
-												 ).andExpect(status().isOk())
-												  .andExpect(jsonPath("$", Matchers.hasSize(3)))
-												  .andExpect(jsonPath("$[*].id", Matchers.containsInAnyOrder(listaBolhas.get(0).getId().intValue(),
+												 .param("lat", latitudeTest.toString())
+												 .param("longi", longitudeTest.toString()))
+		                                         .andExpect(status().isOk())
+												 .andExpect(jsonPath("$", Matchers.hasSize(3)))
+												 .andExpect(jsonPath("$[*].id", Matchers.containsInAnyOrder(listaBolhas.get(0).getId().intValue(),
 														 													listaBolhas.get(1).getId().intValue(),
 														 													listaBolhas.get(2).getId().intValue())))
-												  .andExpect(jsonPath("$[*].nome", Matchers.containsInAnyOrder(listaBolhas.get(0).getNome(),
+												 .andExpect(jsonPath("$[*].nome", Matchers.containsInAnyOrder(listaBolhas.get(0).getNome(),
 														 													  listaBolhas.get(1).getNome(),
 														 													  listaBolhas.get(2).getNome())));
 		
 		Mockito.verify(bolhaService, Mockito.times(1)).findAllCloserBolhas(latitudeTest, longitudeTest);
 		Mockito.verifyNoMoreInteractions(bolhaService);
 		
-	}*/
+	}
 
 }

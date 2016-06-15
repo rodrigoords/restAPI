@@ -79,4 +79,32 @@ public final class Latitude extends Coordenada{
         return new Index(latitude.toString());
     }
     
+    public Latitude newLatitude(String lat){
+        return new Latitude(lat);
+    }
+
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((latitude == null) ? 0 : latitude.hashCode());
+        return result;
+    }
+
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Latitude other = (Latitude) obj;
+        if (latitude == null) {
+            if (other.latitude != null)
+                return false;
+        } else if (!latitude.equals(other.latitude))
+            return false;
+        return true;
+    }
+    
+    
 }

@@ -33,6 +33,10 @@ public class BolhaController {
     private UsuarioService usuarioService;
     @Autowired
     private TipoService tipoService;
+    @Autowired
+    private Latitude latitude;
+    @Autowired
+    private Longitude longitude;
 
     @RequestMapping(method = RequestMethod.GET, value = BolhaRestURIConstants.GET_ALL_BOLHAS)
     public ResponseEntity<List<Bolha>> getAllBolhas() {
@@ -56,10 +60,10 @@ public class BolhaController {
     }
 
     @RequestMapping(method = RequestMethod.GET, value = BolhaRestURIConstants.GET_BOLHA_IN_RANGE)
-    public ResponseEntity<List<Bolha>> getCloserBolhas(@RequestParam(value = "latitude", required = true) Latitude lat,
-            										   @RequestParam(value = "longitude", required = true) Longitude longi) {
-
-        List<Bolha> bolhas = bolhaService.findAllCloserBolhas(lat, longi);
+    public ResponseEntity<List<Bolha>> getCloserBolhas(@RequestParam(value = "lat", required = true) String lat,
+            										   @RequestParam(value = "longi", required = true) String longi) {
+        
+        List<Bolha> bolhas = bolhaService.findAllCloserBolhas(latitude.newLatitude(lat), longitude.newLongitude(longi));
 
         if (bolhas.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);

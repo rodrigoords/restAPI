@@ -78,5 +78,33 @@ public class Longitude extends Coordenada {
     public Index indexValue() {
         return new Index(longitude.toString());
     }
+    
+    public Longitude newLongitude(String longi){
+        return new Longitude(longi);
+    }
 
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((longitude == null) ? 0 : longitude.hashCode());
+        return result;
+    }
+
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Longitude other = (Longitude) obj;
+        if (longitude == null) {
+            if (other.longitude != null)
+                return false;
+        } else if (!longitude.equals(other.longitude))
+            return false;
+        return true;
+    }
+    
+    
 }
