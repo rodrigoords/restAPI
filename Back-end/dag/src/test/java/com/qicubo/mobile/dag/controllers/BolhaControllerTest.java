@@ -1,6 +1,7 @@
 package com.qicubo.mobile.dag.controllers;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -16,11 +17,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
-import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import com.qicubo.mobile.dag.builders.BolhaBuilder;
+import com.qicubo.mobile.dag.dto.BolhaDTO;
 import com.qicubo.mobile.dag.models.Bolha;
 import com.qicubo.mobile.dag.services.BolhaService;
 import com.qicubo.mobile.dag.services.UsuarioService;
@@ -196,9 +197,6 @@ public class BolhaControllerTest {
 		Latitude latitudeTest = new Latitude("-22.222222");
 		Longitude longitudeTest = new Longitude("-47.777777");
 		
-		ReflectionTestUtils.setField(bolhaController, "latitude", latitudeTest);
-		ReflectionTestUtils.setField(bolhaController, "longitude", longitudeTest);
-		
 		Mockito.when(bolhaService.findAllCloserBolhas(latitudeTest, longitudeTest)).thenReturn(listaBolhas);
 		
 		mockMvc.perform(get(BolhaRestURIConstants.GET_BOLHA_IN_RANGE)
@@ -216,6 +214,41 @@ public class BolhaControllerTest {
 		Mockito.verify(bolhaService, Mockito.times(1)).findAllCloserBolhas(latitudeTest, longitudeTest);
 		Mockito.verifyNoMoreInteractions(bolhaService);
 		
+	}
+	
+	@Test
+	public void getcloserBolhasNoContent() throws Exception{
+	    
+        Latitude latitudeTest = new Latitude("-22.222222");
+        Longitude longitudeTest = new Longitude("-47.777777");
+        
+        Mockito.when(bolhaService.findAllCloserBolhas(latitudeTest, longitudeTest)).thenReturn(new ArrayList<Bolha>());
+        
+        mockMvc.perform(get(BolhaRestURIConstants.GET_BOLHA_IN_RANGE)
+                .param("lat", latitudeTest.toString())
+                .param("longi", longitudeTest.toString()))
+                .andExpect(status().isNoContent());
+        
+        Mockito.verify(bolhaService, Mockito.times(1)).findAllCloserBolhas(latitudeTest, longitudeTest);
+        Mockito.verifyNoMoreInteractions(bolhaService);
+	}
+	
+	@Test
+	public void CreateBolha() throws Exception{
+	    
+	    Bolha bolha = new BolhaBuilder("Bolha Teste API").build();	    
+	    
+        mockMvc.perform(post(BolhaRestURIConstants.CREATE_BOLHA)
+                                                  .param("nome", bolha.getNome().toString())
+                                                  .param("descricao",bolha.getDescricao())
+                                                  .param("tipoNome", bolha.getTipo().getNome())
+                                                  .param("usuarioLogin",  bolha.getUsuarioCriacao().getLogin())
+                                                  .param("latitude", bolha.getLatitude().toString())
+                                                  .param("longitude", bolha.getLongitude().toString())
+                                                  .param("dtHoraCriacao", bolha.getDtHoraCriacao())
+                                                  .param("indRestrita", bolha.getIndRestrita().toString()))
+                                                  .andExpect(status().isOk());
+	    
 	}
 
 }

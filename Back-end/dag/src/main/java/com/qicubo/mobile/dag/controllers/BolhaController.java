@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import com.qicubo.mobile.dag.dto.BolhaDTO;
 import com.qicubo.mobile.dag.models.Bolha;
 import com.qicubo.mobile.dag.models.Tipo;
 import com.qicubo.mobile.dag.models.Usuario;
@@ -33,10 +34,6 @@ public class BolhaController {
     private UsuarioService usuarioService;
     @Autowired
     private TipoService tipoService;
-    @Autowired
-    private Latitude latitude;
-    @Autowired
-    private Longitude longitude;
 
     @RequestMapping(method = RequestMethod.GET, value = BolhaRestURIConstants.GET_ALL_BOLHAS)
     public ResponseEntity<List<Bolha>> getAllBolhas() {
@@ -63,7 +60,10 @@ public class BolhaController {
     public ResponseEntity<List<Bolha>> getCloserBolhas(@RequestParam(value = "lat", required = true) String lat,
             										   @RequestParam(value = "longi", required = true) String longi) {
         
-        List<Bolha> bolhas = bolhaService.findAllCloserBolhas(latitude.newLatitude(lat), longitude.newLongitude(longi));
+        Latitude latitude = new Latitude(lat);
+        Longitude longitude = new Longitude(longi);
+        
+        List<Bolha> bolhas = bolhaService.findAllCloserBolhas(latitude, longitude);
 
         if (bolhas.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -89,15 +89,25 @@ public class BolhaController {
     }
 
     @RequestMapping(method = RequestMethod.POST, value = BolhaRestURIConstants.CREATE_BOLHA)
-    public ResponseEntity<Void> createBolha(@RequestBody Bolha bolha, UriComponentsBuilder ucBuilder) {
-
-        Tipo tipo = tipoService.findByName(bolha.getTipo().getNome());
+    public ResponseEntity<Void> createBolha(@RequestBody BolhaDTO bolhaDTO, UriComponentsBuilder ucBuilder) {
+        
+        Bolha bolha = new Bolha();
+        
+        bolha.setDescricao(bolhaDTO.getDescricao());
+        bolha.setDtHoraCriacao(bolhaDTO.getDtHoraCriacao());
+        bolha.setIndRestrita(new Integer(bolhaDTO.getIndRestrita()));
+        bolha.setLatitude(new Latitude(bolhaDTO.getLatitude()));
+        bolha.setLongitude(new Longitude(bolhaDTO.getLongitude()));
+        bolha.setNome(bolhaDTO.getNome());
+        
+        
+        Tipo tipo = tipoService.findByName(bolhaDTO.getTipoNome());
 
         if (tipo == null) {
             return new ResponseEntity<>(HttpStatus.FAILED_DEPENDENCY);
         }
 
-        Usuario usuario = usuarioService.findByLogin(bolha.getUsuarioCriacao().getLogin());
+        Usuario usuario = usuarioService.findByLogin(bolhaDTO.getUsuarioCriacaoLogin());
 
         if (usuario == null) {
             return new ResponseEntity<>(HttpStatus.FAILED_DEPENDENCY);
