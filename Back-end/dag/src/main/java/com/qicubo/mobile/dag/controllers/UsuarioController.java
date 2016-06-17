@@ -1,5 +1,6 @@
 package com.qicubo.mobile.dag.controllers;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import com.qicubo.mobile.dag.dto.UsuarioDTO;
 import com.qicubo.mobile.dag.models.Usuario;
 import com.qicubo.mobile.dag.services.UsuarioService;
 
@@ -18,23 +20,34 @@ import com.qicubo.mobile.dag.services.UsuarioService;
 public class UsuarioController {
 	
 	@Autowired
-	UsuarioService usuarioService;
+	private UsuarioService usuarioService;
 	
+	private ModelMapper mapper = new ModelMapper();
 	
 	@RequestMapping(method = RequestMethod.GET, value = UsuarioRestURIConstants.GET_USUARIO_BY_LOGIN)
-	public ResponseEntity<Usuario> getUsuarioByLogin(@PathVariable("login") String login) {
+	public ResponseEntity<UsuarioDTO> getUsuarioByLogin(@PathVariable("login") String login) {
 		
 		Usuario usuario = usuarioService.findByLogin(login); 
 		
 		if (usuario == null) {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		}
-		return new ResponseEntity<>(usuario, HttpStatus.OK);
+		
+		UsuarioDTO usuarioDTO = mapper.map(usuario, UsuarioDTO.class); 
+		
+		return new ResponseEntity<>(usuarioDTO, HttpStatus.OK);
 		 
 	}
 	
 	@RequestMapping(method = RequestMethod.POST, value = UsuarioRestURIConstants.CREATE_USUARIO)
-	public ResponseEntity<Void> createUsuario(@RequestBody Usuario usuario, UriComponentsBuilder ucBuilder ){
+	public ResponseEntity<Void> createUsuario(@RequestBody UsuarioDTO usuarioDTO, UriComponentsBuilder ucBuilder ){
+		
+		Usuario usuario = new Usuario();
+		
+		usuario.setLogin(usuarioDTO.getLogin());
+		usuario.setNome(usuarioDTO.getNome());
+		usuario.setSobreNome(usuarioDTO.getSobreNome());
+		usuario.setEmail(usuarioDTO.getEmail());
 		
 		if (usuarioService.isUsuarioExist(usuario)){
 			return new ResponseEntity<Void>(HttpStatus.CONFLICT);

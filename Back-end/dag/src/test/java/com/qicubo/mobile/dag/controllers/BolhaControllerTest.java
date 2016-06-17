@@ -53,6 +53,8 @@ public class BolhaControllerTest {
 	
 	private List<Bolha> listaBolhas = new ArrayList<>();
 	
+	private ModelMapper mapper = new ModelMapper();
+	
 	@Before
 	public void setUp(){
 		
@@ -269,8 +271,6 @@ public class BolhaControllerTest {
 	@Test
 	public void CreateBolhaWithoutTipo() throws Exception{
 		
-		ModelMapper mapper = new ModelMapper();
-		
 	    Bolha bolha = new BolhaBuilder("Bolha Teste API").build();
 	    bolha.setTipo(null);
 	    
@@ -295,7 +295,6 @@ public class BolhaControllerTest {
 	
 	@Test
 	public void CreateBolhaWithoutUserLogin() throws Exception{
-		ModelMapper mapper = new ModelMapper();
 		
 	    Bolha bolha = new BolhaBuilder("Bolha Teste API").build();
 	    bolha.setUsuarioCriacao(null);
@@ -321,7 +320,6 @@ public class BolhaControllerTest {
 	
 	@Test
 	public void CreateBolhaExists() throws Exception{
-		ModelMapper mapper = new ModelMapper();
 		
 	    Bolha bolha = new BolhaBuilder("Bolha Teste API").build();
 	    

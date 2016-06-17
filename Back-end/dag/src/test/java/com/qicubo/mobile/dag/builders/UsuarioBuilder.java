@@ -23,12 +23,7 @@ public class UsuarioBuilder {
         usuario.setEmail(email);
         return this;
     }
-    
-    public UsuarioBuilder comSenha(String senha){
-        usuario.setSenha(senha);
-        return this;
-    }
-    
+        
     public Usuario build(){
         return usuario;
     }
