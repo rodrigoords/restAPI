@@ -160,4 +160,73 @@ public class Bolha {
         }
     }
 
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((descricao == null) ? 0 : descricao.hashCode());
+		result = prime * result + ((dtHoraCriacao == null) ? 0 : dtHoraCriacao.hashCode());
+		result = prime * result + ((indRestrita == null) ? 0 : indRestrita.hashCode());
+		result = prime * result + ((latitude == null) ? 0 : latitude.hashCode());
+		result = prime * result + ((longitude == null) ? 0 : longitude.hashCode());
+		result = prime * result + ((nome == null) ? 0 : nome.hashCode());
+		result = prime * result + ((tipo == null) ? 0 : tipo.hashCode());
+		result = prime * result + ((usuarioCriacao == null) ? 0 : usuarioCriacao.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Bolha other = (Bolha) obj;
+		if (descricao == null) {
+			if (other.descricao != null)
+				return false;
+		} else if (!descricao.equals(other.descricao))
+			return false;
+		if (dtHoraCriacao == null) {
+			if (other.dtHoraCriacao != null)
+				return false;
+		} else if (!dtHoraCriacao.equals(other.dtHoraCriacao))
+			return false;
+		if (indRestrita == null) {
+			if (other.indRestrita != null)
+				return false;
+		} else if (!indRestrita.equals(other.indRestrita))
+			return false;
+		if (latitude == null) {
+			if (other.latitude != null)
+				return false;
+		} else if (!latitude.equals(other.latitude))
+			return false;
+		if (longitude == null) {
+			if (other.longitude != null)
+				return false;
+		} else if (!longitude.equals(other.longitude))
+			return false;
+		if (nome == null) {
+			if (other.nome != null)
+				return false;
+		} else if (!nome.equals(other.nome))
+			return false;
+		if (tipo == null) {
+			if (other.tipo != null)
+				return false;
+		} else if (!tipo.equals(other.tipo))
+			return false;
+		if (usuarioCriacao == null) {
+			if (other.usuarioCriacao != null)
+				return false;
+		} else if (!usuarioCriacao.equals(other.usuarioCriacao))
+			return false;
+		return true;
+	}
+    
+    
+
 }

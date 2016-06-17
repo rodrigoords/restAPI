@@ -1,7 +1,9 @@
 package com.qicubo.mobile.dag.controllers;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -34,31 +36,43 @@ public class BolhaController {
     private UsuarioService usuarioService;
     @Autowired
     private TipoService tipoService;
+    
+	private ModelMapper mapper = new ModelMapper();
 
     @RequestMapping(method = RequestMethod.GET, value = BolhaRestURIConstants.GET_ALL_BOLHAS)
-    public ResponseEntity<List<Bolha>> getAllBolhas() {
-
+    public ResponseEntity<List<BolhaDTO>> getAllBolhas() {
+    	
+    	List<BolhaDTO> bolhasDTO = new ArrayList<>();
+    	
         List<Bolha> bolhas = bolhaService.findAll();
-
+        
         if (bolhas.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
+        
+        for (Bolha bolha : bolhas) {
+        	bolhasDTO.add(mapper.map(bolha, BolhaDTO.class));
+        }
 
-        return new ResponseEntity<>(bolhas, HttpStatus.OK);
+        return new ResponseEntity<>(bolhasDTO, HttpStatus.OK);
     }
 
     @RequestMapping(method = RequestMethod.GET, value = BolhaRestURIConstants.GET_BOLHA_BY_ID)
-    public ResponseEntity<Bolha> getBolhaById(@PathVariable("id") Long id) {
+    public ResponseEntity<BolhaDTO> getBolhaById(@PathVariable("id") Long id) {
         Bolha bolha = bolhaService.findById(id);
         if (bolha == null) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
-        return new ResponseEntity<>(bolha, HttpStatus.OK);
+        
+        BolhaDTO bolhaDTO = new BolhaDTO(); 
+        bolhaDTO = mapper.map(bolha, BolhaDTO.class );
+        
+        return new ResponseEntity<>(bolhaDTO, HttpStatus.OK);
     }
 
     @RequestMapping(method = RequestMethod.GET, value = BolhaRestURIConstants.GET_BOLHA_IN_RANGE)
-    public ResponseEntity<List<Bolha>> getCloserBolhas(@RequestParam(value = "lat", required = true) String lat,
-            										   @RequestParam(value = "longi", required = true) String longi) {
+    public ResponseEntity<List<BolhaDTO>> getCloserBolhas(@RequestParam(value = "lat", required = true) String lat,
+            										      @RequestParam(value = "longi", required = true) String longi) {
         
         Latitude latitude = new Latitude(lat);
         Longitude longitude = new Longitude(longi);
@@ -68,24 +82,37 @@ public class BolhaController {
         if (bolhas.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
-
-        return new ResponseEntity<>(bolhas, HttpStatus.OK);
+        
+        List<BolhaDTO> bolhasDTO = new ArrayList<>();
+        
+        for (Bolha bolha : bolhas){
+        	bolhasDTO.add(mapper.map(bolha, BolhaDTO.class));
+        }
+        
+        return new ResponseEntity<>(bolhasDTO, HttpStatus.OK);
     }
 
     @RequestMapping(method = RequestMethod.GET, value = BolhaRestURIConstants.GET_BOLHA_BY_USER_LOGIN)
-    public ResponseEntity<List<Bolha>> getBolhaByUser(@PathVariable("login") String login) {
+    public ResponseEntity<List<BolhaDTO>> getBolhaByUser(@PathVariable("login") String login) {
 
         Usuario user = usuarioService.findByLogin(login);
 
         if (user == null) {
             return new ResponseEntity<>(HttpStatus.FAILED_DEPENDENCY);
         }
-
+        
         List<Bolha> bolhas = bolhaService.findBolhaByUser(user);
         if (bolhas.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
-        return new ResponseEntity<>(bolhas, HttpStatus.OK);
+        
+        List<BolhaDTO> bolhasDTO = new ArrayList<>();
+        
+        for (Bolha bolha : bolhas){
+        	bolhasDTO.add(mapper.map(bolha, BolhaDTO.class));
+        }
+        
+        return new ResponseEntity<>(bolhasDTO, HttpStatus.OK);
     }
 
     @RequestMapping(method = RequestMethod.POST, value = BolhaRestURIConstants.CREATE_BOLHA)
