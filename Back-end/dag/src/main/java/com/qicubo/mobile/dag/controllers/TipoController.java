@@ -1,7 +1,9 @@
 package com.qicubo.mobile.dag.controllers;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.qicubo.mobile.dag.dto.TipoDTO;
 import com.qicubo.mobile.dag.models.Tipo;
 import com.qicubo.mobile.dag.services.TipoService;
 
@@ -19,25 +22,36 @@ public class TipoController {
 	@Autowired
 	private TipoService tipoService;
 	
+	private ModelMapper mapper = new ModelMapper();
+	
 	@RequestMapping(method = RequestMethod.GET, value=TipoRestURIConstants.GET_ALL_TIPOS)
-	public ResponseEntity<List<Tipo>> list() {
+	public ResponseEntity<List<TipoDTO>> list() {
 		
-	    List<Tipo> tipo = tipoService.findAll();
+	    List<Tipo> tipos = tipoService.findAll();
 		
-	    if (tipo.isEmpty()){
-	        return new ResponseEntity<List<Tipo>>(HttpStatus.NO_CONTENT);
+	    if (tipos.isEmpty()){
+	        return new ResponseEntity<List<TipoDTO>>(HttpStatus.NO_CONTENT);
 	    }
 	    
-		return new ResponseEntity<List<Tipo>>(tipo, HttpStatus.OK);
+	    List<TipoDTO> tiposDTO = new ArrayList<>();
+	    
+	    for(Tipo tipo : tipos){
+	    	tiposDTO.add(mapper.map(tipo, TipoDTO.class));
+	    }
+	    
+		return new ResponseEntity<List<TipoDTO>>(tiposDTO, HttpStatus.OK);
 	}
 	
-	@RequestMapping(method = RequestMethod.GET, value = TipoRestURIConstants.GET_TIPO_BY_ID)
-	public ResponseEntity<Tipo> getTipoById(@PathVariable("id") Long id) {
-		Tipo tipo = tipoService.findById(id);
+	@RequestMapping(method = RequestMethod.GET, value = TipoRestURIConstants.GET_TIPO_BY_NAME)
+	public ResponseEntity<TipoDTO> getTipoByName(@PathVariable("name") String name) {
+		Tipo tipo = tipoService.findByName(name);
 		if (tipo == null){
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		}
-		return new ResponseEntity<>(tipo, HttpStatus.OK);
+		
+		TipoDTO tipoDTO = mapper.map(tipo, TipoDTO.class);
+		
+		return new ResponseEntity<>(tipoDTO, HttpStatus.OK);
 	}
 	
 }

@@ -61,9 +61,6 @@ public class TipoControllerTest {
 		//
 		mockMvc.perform(get(TipoRestURIConstants.GET_ALL_TIPOS)).andExpect(status().isOk())
 																.andExpect(jsonPath("$", Matchers.hasSize(3)))
-																.andExpect(jsonPath("$[*].id", Matchers.containsInAnyOrder(listaTipos.get(0).getId().intValue(),
-																														   listaTipos.get(1).getId().intValue(),
-																														   listaTipos.get(2).getId().intValue())))
 																.andExpect(jsonPath("$[*].nome", Matchers.containsInAnyOrder(listaTipos.get(0).getNome(),
 																															 listaTipos.get(1).getNome(),
 																															 listaTipos.get(2).getNome())))
@@ -86,33 +83,32 @@ public class TipoControllerTest {
 	}
 	
 	@Test
-	public void getTipoById() throws Exception{
+	public void getTipoByName() throws Exception{
 		
 		tipo = new TipoBuilder("Balada").build();
 		tipo.setId(1L);
 		
-		Mockito.when(tipoService.findById(tipo.getId())).thenReturn(tipo);
+		Mockito.when(tipoService.findByName(tipo.getNome())).thenReturn(tipo);
 		
-		mockMvc.perform(get(TipoRestURIConstants.GET_TIPO_BY_ID, tipo.getId()))
+		mockMvc.perform(get(TipoRestURIConstants.GET_TIPO_BY_NAME, tipo.getNome()))
 										        .andExpect(status().isOk())
-										        .andExpect(jsonPath("$.id", Matchers.is(tipo.getId().intValue())))
 										        .andExpect(jsonPath("$.nome", Matchers.is(tipo.getNome())))
 										        .andExpect(jsonPath("$.descricao", Matchers.is(tipo.getDescricao())));
 		
-		Mockito.verify(tipoService, Mockito.times(1)).findById(tipo.getId());
+		Mockito.verify(tipoService, Mockito.times(1)).findByName(tipo.getNome());
 		Mockito.verifyNoMoreInteractions(tipoService);
 	}
 	
 	@Test
-	public void getTipoByIdNoContent() throws Exception{
+	public void getTipoByNameNoContent() throws Exception{
 		
 		tipo = new TipoBuilder("Balada").build();
 		tipo.setId(1L);
-		Mockito.when(tipoService.findById(tipo.getId())).thenReturn(null);
+		Mockito.when(tipoService.findByName(tipo.getNome())).thenReturn(null);
 		
-		mockMvc.perform(get(TipoRestURIConstants.GET_TIPO_BY_ID, tipo.getId())).andExpect(status().isNoContent());
+		mockMvc.perform(get(TipoRestURIConstants.GET_TIPO_BY_NAME, tipo.getNome())).andExpect(status().isNoContent());
 		
-		Mockito.verify(tipoService, Mockito.times(1)).findById(tipo.getId());
+		Mockito.verify(tipoService, Mockito.times(1)).findByName(tipo.getNome());
 		Mockito.verifyNoMoreInteractions(tipoService);
 	}
 	
