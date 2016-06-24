@@ -9,7 +9,8 @@
  *
  */
 
-var dag = angular.module('dag', ['ionic','dag.controllers','dag.services']);
+var dag = angular.module('dag', ['ionic','ngCordova','dag.controllers','dag.services','dag.directives']);
+// removido ,'ionic.contrib.drawer'
 
 /********************************************************************/
 // -> Dag::Run
@@ -22,6 +23,8 @@ dag.run(function($ionicPlatform, $state) {
       cordova.plugins.Keyboard.disableScroll(true);
     }
 
+    //ionic.Platform.fullScreen();
+
     if (window.StatusBar) {
       StatusBar.styleDefault();
     }
@@ -29,10 +32,11 @@ dag.run(function($ionicPlatform, $state) {
   });
 
   $logged = 0;
-  
+
   /*if(!$logged){
   	$state.go('app/intro');
   }*/
+
 
 });
 // <- Fim
@@ -42,6 +46,7 @@ dag.run(function($ionicPlatform, $state) {
 // -> Dag::Controllers & Services
 var controllers = angular.module('dag.controllers', []);
 var services    = angular.module('dag.services', []);
+var directives  = angular.module('dag.directives', []);
 
 // <- Fim
 /********************************************************************/

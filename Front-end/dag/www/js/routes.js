@@ -12,10 +12,15 @@
 dag.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
 
   // Força o tabs no rodapé utilizando o Android
-  //$ionicConfigProvider.tabs.position('bottom');
+  $ionicConfigProvider.tabs.position('top');
   $ionicConfigProvider.backButton.previousTitleText(false).text('');
 
   $stateProvider
+  .state('login', {
+      url: '/login',
+      templateUrl: "templates/login.html",
+      controller: 'LoginCtrl'
+  })
   .state('termos', {
       url: '/termos',
       templateUrl: 'templates/termos.html'
@@ -26,26 +31,20 @@ dag.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
     templateUrl: 'templates/menu.html',
     controller: 'AppCtrl'
   })
-  .state('app.intro', {
-      url: '/intro',
-      views: {
-          'menuContent' :{
-            templateUrl: "templates/intro.html",
-            controller: 'IntroCtrl'
-          }
-        }
-  })
   .state('app.mapa', {
     url: '/mapa',
     views: {
-        'menuContent' :{
-          templateUrl: "templates/map.html",
-          controller: 'MapsCtrl'
-        }
+      'menuContent': {
+        templateUrl: 'templates/tabs.html'
+      },
+      'pageContent': {
+        templateUrl: "templates/map.html",
+        controller: 'MapsCtrl'
       }
+    }
   });
 
 
   // Se nada for definido, chama a página abaixo
-  $urlRouterProvider.otherwise('/app/intro');
+  $urlRouterProvider.otherwise('/login');
 });

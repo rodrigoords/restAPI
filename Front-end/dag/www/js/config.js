@@ -9,6 +9,9 @@
  *
  */
 
+
+ /********************************************************************/
+ // -> Dag::Constants
 dag.constant('SERVER', {
 
   // Servidor Dag!: Local
@@ -17,3 +20,5 @@ dag.constant('SERVER', {
   // Servidor Dag!: Remoto
   //url: 'http://www.dagball.xyz.com'
 });
+// <- Fim
+/********************************************************************/
