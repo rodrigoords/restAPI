@@ -13,8 +13,4 @@ controllers.controller('AppCtrl', function($scope, $ionicSideMenuDelegate) {
   $scope.toggleLeft = function() {
        $ionicSideMenuDelegate.toggleLeft();
   };
-
-});
-
-controllers.controller('PlaylistCtrl', function($scope, $stateParams) {
 });

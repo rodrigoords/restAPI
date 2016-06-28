@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -56,7 +57,8 @@ public class BolhaController {
 
         return new ResponseEntity<>(bolhasDTO, HttpStatus.OK);
     }
-
+    
+    @CrossOrigin(origins = "http://localhost:8100")
     @RequestMapping(method = RequestMethod.GET, value = BolhaRestURIConstants.GET_BOLHA_BY_ID)
     public ResponseEntity<BolhaDTO> getBolhaById(@PathVariable("id") Long id) {
         Bolha bolha = bolhaService.findById(id);
@@ -69,7 +71,8 @@ public class BolhaController {
         
         return new ResponseEntity<>(bolhaDTO, HttpStatus.OK);
     }
-
+    
+    @CrossOrigin(origins = "http://localhost:8100")
     @RequestMapping(method = RequestMethod.GET, value = BolhaRestURIConstants.GET_BOLHA_IN_RANGE)
     public ResponseEntity<List<BolhaDTO>> getCloserBolhas(@RequestParam(value = "lat", required = true) String lat,
             										      @RequestParam(value = "longi", required = true) String longi) {
@@ -91,7 +94,8 @@ public class BolhaController {
         
         return new ResponseEntity<>(bolhasDTO, HttpStatus.OK);
     }
-
+    
+    @CrossOrigin(origins = "http://localhost:8100")
     @RequestMapping(method = RequestMethod.GET, value = BolhaRestURIConstants.GET_BOLHA_BY_USER_LOGIN)
     public ResponseEntity<List<BolhaDTO>> getBolhaByUser(@PathVariable("login") String login) {
 
@@ -114,7 +118,8 @@ public class BolhaController {
         
         return new ResponseEntity<>(bolhasDTO, HttpStatus.OK);
     }
-
+    
+    @CrossOrigin(origins = "http://localhost:8100")
     @RequestMapping(method = RequestMethod.POST, value = BolhaRestURIConstants.CREATE_BOLHA)
     public ResponseEntity<Void> createBolha(@RequestBody BolhaDTO bolhaDTO, UriComponentsBuilder ucBuilder) {
         

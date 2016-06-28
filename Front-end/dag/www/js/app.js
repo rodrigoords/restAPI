@@ -9,7 +9,7 @@
  *
  */
 
-var dag = angular.module('dag', ['ionic','ngCordova','dag.controllers','dag.services','dag.directives']);
+var dag = angular.module('dag', ['ionic','ngCordova','dag.controllers','dag.services','dag.directives', 'dag.factories']);
 // removido ,'ionic.contrib.drawer'
 
 /********************************************************************/
@@ -47,6 +47,7 @@ dag.run(function($ionicPlatform, $state) {
 var controllers = angular.module('dag.controllers', []);
 var services    = angular.module('dag.services', []);
 var directives  = angular.module('dag.directives', []);
+var factories   = angular.module('dag.factories', []);
 
 // <- Fim
 /********************************************************************/
