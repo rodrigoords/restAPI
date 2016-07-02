@@ -1,28 +1,6 @@
-# Eclipse
-.classpath
-.project
-.springBeans
-.settings/
-bin/
+# Specifies intentionally untracked files to ignore when using Git
+# http://git-scm.com/docs/gitignore
 
-# Intellij
-.idea/
-*.iml
-*.iws
-
-# Mac
-.DS_Store
-
-# Maven
-log/
-target/
-pom.xml.tag
-pom.xml.releaseBackup
-pom.xml.versionsBackup
-pom.xml.next
-release.properties
-dependency-reduced-pom.xml
-buildNumber.properties
-.mvn/
-mvnw
-mvnw.cmd
+node_modules/
+platforms/
+plugins/

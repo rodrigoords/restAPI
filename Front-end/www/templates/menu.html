@@ -1,0 +1,52 @@
+<!-- /**
+ * Arquivo HTML do Menu Esquerdo
+ *
+ * @file Menu.html
+ * @authors André Queiroz, Rafael Mello e Rodrigo Sene
+ * @version 1.0
+ *
+ * @copyright 2016, Dag!
+ *
+ */ -->
+
+<ion-side-menus enable-menu-with-back-views="true">
+
+  <!-- Exibição do conteúdo do Menu -->
+  <ion-side-menu side="left" expose-aside-when="large" width="330">
+
+    <!-- Exibição das abas -->
+    <ion-nav-view name="menuContent"></ion-nav-view>
+
+    <ion-footer-bar align-title="center" class="bg-dark">
+      <div class="fluid-width text-default text-center fs10 p5">© 2016 Dag - v1.0</div>
+    </ion-footer-bar>
+
+  </ion-side-menu>
+
+  <!-- Exibição do conteúdo -->
+  <ion-side-menu-content>
+
+    <!-- Barra de navegação das páginas -->
+    <ion-nav-bar class="bar-assertive bg-red-dag br-b-n h-48" align-title="left" animation="nav-title-slide-ios7" no-tap-scroll="true">
+
+      <ion-nav-buttons side="left" has-header="true">
+        <div class="hidden-lg">
+          <button menu-toggle="left" class="button button-icon icon ion-navicon-round pn pt3"></button>
+          <span class="notify notify-new">25</span>
+        </div>
+        <div class="item-image"><img src="img/logos/small_header.png"/></div>
+
+        <!-- Botões de Navegação -->
+        <div class="button-bars btn-header-container">
+          <button class="button btn-small-header-group view-change mt10 mr5" onclick="mudaVisualMapa();"></button>
+          <button class="button btn-large-header-group create mr5"></button>
+          <button class="button btn-small-header-group search mt10 mr5"></button>
+        </div>
+      </ion-nav-buttons>
+
+    </ion-nav-bar>
+
+    <!-- Exibição do conteúdo carregado -->
+    <ion-nav-view name="pageContent"></ion-nav-view>
+
+  </ion-side-menu-content>
