@@ -3,51 +3,7 @@ factories.factory('MapsFactory', function($cordovaGeolocation, JSONBolhaFactory)
   var map = null;
   var markerUser = null;
   var zoomMinimo = 16;
-  var styles = [
-    {
-      "stylers": [
-        {
-            "hue": "#0092ff"
-        },
-        {
-            "invert_lightness": true
-        },
-        {
-            "saturation": -100
-        },
-        {
-            "lightness": 33
-        },
-        {
-            "gamma": 0.5
-        }
-      ]
-    },
-    {
-      "featureType": "water",
-      "elementType": "geometry",
-      "stylers": [
-        {
-            "color": "#2D333C"
-        }
-      ]
-    },
-    {
-      "featureType": "administrative",
-      "elementType": "geometry",
-      "stylers": [
-          {
-              "visibility": "on"
-          },
-          {
-              "color": "#333739"
-          },
-          {
-              "weight": 0.8
-          }
-      ]
-    }
-  ];
+  var styles = [{"stylers":[{"hue":"#ff1a00"},{"invert_lightness":true},{"saturation":-100},{"lightness":33},{"gamma":0.5}]},{"featureType":"water","elementType":"geometry","stylers":[{"color":"#2D333C"}]}];
   /*Funções da factory*/
   /*Função responsavel por iniciar o Google Maps*/
   function initMap(){
@@ -92,7 +48,7 @@ factories.factory('MapsFactory', function($cordovaGeolocation, JSONBolhaFactory)
 
       var latlngbounds = new google.maps.LatLngBounds();
       var pathImage    = '../../img/marcadores/m';
-      var mkOptions    = {gridSize: 50, maxZoom: zoomMinimo, imagePath: pathImage};
+      var mkOptions    = {gridSize: 50, maxZoom: zoomMinimo, imagePath: pathImage, enableRetinaIcons: true};
 
 
       var records  = _response.data;

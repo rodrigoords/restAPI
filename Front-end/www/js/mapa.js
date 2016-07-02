@@ -8,6 +8,8 @@ function iniciaMapa(position){
 	var mapOptions = {
 	  center: new google.maps.LatLng(position.coords.latitude, position.coords.longitude),
 	  zoom: 15,
+		minZoom:12,
+		maxZoom: 20,
 	  mapTypeId: google.maps.MapTypeId.ROADMAP,
 	  disableDefaultUI: true
 	};
@@ -20,7 +22,7 @@ function iniciaMapa(position){
 					 data: [new google.maps.LatLng(position.coords.latitude, position.coords.longitude)],
 				  	 map: mapaNormal
 				    });
- 	
+
  	mudaVisualMapa();
 
 	return mapaRetorno;
