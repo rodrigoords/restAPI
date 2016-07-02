@@ -61,7 +61,7 @@ public class BolhaServiceImpl implements BolhaService {
 	public List<Bolha> findAllCloserBolhas(Latitude latitude, Longitude longitude) {
 		
 	    BigDecimal distancia;
-	    Index indice = latitude.indexValue().add(longitude.indexValue());
+	    Index indice = latitude.indexValue().subtract(longitude.indexValue());
 	    
 	    List<Bolha> bolhas = new ArrayList<>();
 	    
