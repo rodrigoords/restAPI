@@ -91,7 +91,9 @@ factories.factory('MapsFactory', function($cordovaGeolocation, JSONBolhaFactory)
       bolhas.push(markerUser);
 
       var latlngbounds = new google.maps.LatLngBounds();
-      var mkOptions    = {gridSize: 50, maxZoom: zoomMinimo};
+      var pathImage    = '../../img/marcadores/m';
+      var mkOptions    = {gridSize: 50, maxZoom: zoomMinimo, imagePath: pathImage};
+
 
       var records  = _response.data;
 
