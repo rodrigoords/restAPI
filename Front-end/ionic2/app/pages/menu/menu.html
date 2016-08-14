@@ -5,15 +5,44 @@
   Ionic pages and navigation.
 -->
 <ion-header>
+  <ion-navbar>
+
+    <ion-avatar class="align-center">
+      <img src="img/demo/avatar1.jpg">
+    </ion-avatar>
+
+  </ion-navbar>
 </ion-header>
 
 
 <ion-content padding>
 
+  <div class="align">
+    <button large primary class="align-item align-item--fixed">
+      <ion-icon name="md-add"></ion-icon>
+    </button>
+  </div>
+
 </ion-content>
 
 <ion-footer>
-  <button fab danger fab-bottom fab-center class="fab-footer" (click)="dismiss()">
-    <ion-icon name="close-circle" is-active="false"></ion-icon>
-  </button>
+  <ion-grid>
+  <ion-row>
+    <ion-col width-33 text-center>
+      <button small danger item-right>
+        <ion-icon name="search"></ion-icon>
+      </button>
+    </ion-col>
+    <ion-col width-33>
+      <button fab danger fab-bottom fab-center class="fab-footer" (click)="dismiss()">
+        <ion-icon name="close-circle" is-active="false"></ion-icon>
+      </button>
+    </ion-col>
+    <ion-col width-33 text-center>
+      <button small danger item-right>
+        <ion-icon name="md-settings"></ion-icon>
+      </button>
+    </ion-col>
+  </ion-row>
+  </ion-grid>
 </ion-footer>
