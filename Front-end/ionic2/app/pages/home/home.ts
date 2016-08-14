@@ -53,7 +53,7 @@ export class HomePage {
   }
 
   initMap(){
-    let styles = [{"stylers":[{"hue":"#ff1a00"},{"invert_lightness":true},{"saturation":-100},{"lightness":25},{"gamma":0.5}]},{"featureType":"water","elementType":"geometry","stylers":[{"color":"#2D333C"}]}];
+    let styles = [{"stylers":[{"hue":"#ff1a00"},{"invert_lightness":true},{"saturation":-100},{"lightness":25},{"gamma":0.5}]},{"featureType":"water","elementType":"geometry","stylers":[{"color":"#2D333C"}]},{"featureType":"poi","stylers":[{"visibility":"off"}]}];
 
     navigator.geolocation.getCurrentPosition( (position) => {
 
