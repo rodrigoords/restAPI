@@ -1,7 +1,7 @@
 import {Component} from '@angular/core';
 import {NavController, ModalController, Platform, NavParams, ViewController} from 'ionic-angular';
 
-import {MenuPage} from '../../pages/menu/menu';
+import {MenuPage} from '../menu/menu';
 
 @Component({
   templateUrl: 'build/pages/home/home.html'

@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { NavController, ViewController } from 'ionic-angular';
 
+import {SearchPage} from '../search/search';
 /*
   Generated class for the MenuPage page.
 
@@ -14,6 +15,10 @@ export class MenuPage {
 
   constructor(private navCtrl: NavController, public viewCtrl: ViewController) {
 
+  }
+
+  searchTapped(event){
+    this.navCtrl.push(SearchPage);
   }
 
   dismiss() {
