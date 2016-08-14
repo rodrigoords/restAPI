@@ -1,0 +1,17 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title><img class="title-image" src="img/logos/small_header.png" /></ion-title>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content class="home" id="map"></ion-content>
+
+<ion-footer no-shadow>
+  <button fab danger large fab-bottom fab-center class="fab-footer" (click)="openModal()">
+    <ion-icon name="compass" is-active="false"></ion-icon>
+  </button>
+  <button small muted item-right class="locate-me" (click)="centerMap()">
+    <ion-icon name="ios-navigate"></ion-icon>
+  </button>
+</ion-footer>
