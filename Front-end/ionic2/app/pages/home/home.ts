@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {NavController, ModalController, Platform, NavParams, ViewController} from 'ionic-angular';
+import {NavController, ModalController, Platform, NavParams, ViewController, AlertController, LoadingController} from 'ionic-angular';
 
 import {MenuPage} from '../menu/menu';
 
@@ -8,16 +8,23 @@ import {MenuPage} from '../menu/menu';
 })
 export class HomePage {
 
-  constructor(public navCtrl: NavController, public modalCtrl: ModalController) {
+  constructor(private navCtrl: NavController,
+              private modalCtrl: ModalController,
+              private alertController: AlertController,
+              private loadingController: LoadingController) {
     this.loadGoogleMaps();
   }
 
-  map: any;
+  loader = this.loadingController.create({
+    content: "Please wait...",
+    duration: 3000
+  });
+  map: google.maps.Map;
   apiKey: any = 'AIzaSyAu6Qs0-M9n_0f5kChH6RjzOgoD8qX39qk';
 
 
   openModal() {
-    let modal = this.modalCtrl.create(MenuPage);
+    let modal = this.modalCtrl.create(MenuPage, {map:this.map} );
     modal.present();
   }
 
@@ -55,6 +62,8 @@ export class HomePage {
   initMap(){
     let styles = [{"stylers":[{"hue":"#ff1a00"},{"invert_lightness":true},{"saturation":-100},{"lightness":25},{"gamma":0.5}]},{"featureType":"water","elementType":"geometry","stylers":[{"color":"#2D333C"}]},{"featureType":"poi","stylers":[{"visibility":"off"}]}];
 
+    this.presentLoading();
+
     navigator.geolocation.getCurrentPosition( (position) => {
 
       let latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
@@ -84,7 +93,7 @@ export class HomePage {
       });
 
     }, (error) => {
-        console.error("this is error",error);
+        this.showAlert();
     });
   }
 
@@ -94,5 +103,22 @@ export class HomePage {
     }, (error) => {
         console.error("this is error",error);
     });
+  }
+
+  presentLoading() {
+    this.loader.present();
+  }
+
+  desmissLoading(){
+    this.loader.dismiss();
+  }
+  showAlert() {
+    let alert = this.alertController.create({
+      title: 'Error',
+      subTitle: 'Não foi possível adquirir a sua localização!',
+      buttons: ['OK']
+    });
+    alert.present();
+    this.desmissLoading();
   }
 }

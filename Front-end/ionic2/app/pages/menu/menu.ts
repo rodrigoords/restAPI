@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, ViewController } from 'ionic-angular';
+import { NavController, ViewController, NavParams} from 'ionic-angular';
 
 import {SearchPage} from '../search/search';
 /*
@@ -13,12 +13,16 @@ import {SearchPage} from '../search/search';
 })
 export class MenuPage {
 
-  constructor(private navCtrl: NavController, public viewCtrl: ViewController) {
+  map: google.maps.Map;
 
+  constructor(private navCtrl: NavController, private viewCtrl: ViewController, params: NavParams) {
+    this.map = params.get('map');
   }
 
   searchTapped(event){
-    this.navCtrl.push(SearchPage);
+    this.navCtrl.push(SearchPage,{
+      map: this.map
+    });
   }
 
   dismiss() {
