@@ -17,6 +17,7 @@ export class MenuPage {
 
   constructor(private navCtrl: NavController, private viewCtrl: ViewController, params: NavParams) {
     this.map = params.get('map');
+    console.log('enviou mapa:' + this.map);
   }
 
   searchTapped(event){

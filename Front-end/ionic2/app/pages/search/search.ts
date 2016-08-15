@@ -15,6 +15,7 @@ export class SearchPage {
   map: google.maps.Map;
   input: any;
   searchBox: any;
+
   constructor(private navCtrl: NavController, params: NavParams ) {
     console.log('entrou no construtor :'+params);
     this.map = params.get('map');

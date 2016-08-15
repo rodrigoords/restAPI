@@ -25,6 +25,7 @@ export class HomePage {
 
   openModal() {
     let modal = this.modalCtrl.create(MenuPage, {map:this.map} );
+    console.log('nav parametros home :'+modal.getNavParams());
     modal.present();
   }
 
@@ -44,7 +45,7 @@ export class HomePage {
 
       if(this.apiKey){
           console.log("API EXISTS");
-          script.src = 'http://maps.google.com/maps/api/js?key=' + this.apiKey + '&callback=mapInit';
+          script.src = 'http://maps.google.com/maps/api/js?key=' + this.apiKey + '&callback=mapInit&libraries=places';
       } else {
           script.src = 'http://maps.google.com/maps/api/js?callback=mapInit';
       }
