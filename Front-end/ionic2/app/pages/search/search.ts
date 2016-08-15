@@ -20,9 +20,13 @@ export class SearchPage {
     console.log('entrou no construtor :'+params);
     this.map = params.get('map');
     console.log(this.map);
-    this.input = document.getElementById('searchBar');
-    this.searchBox = new google.maps.places.SearchBox(this.input);
-    this.map.controls[google.maps.ControlPosition.TOP_LEFT].push(this.input);
+    //this.input = document.getElementById('searchBar');
+    //console.log('achou o elemento: '+ this.input);
+    //this.searchBox = new google.maps.places.SearchBox(this.input);
+    //this.map.controls[google.maps.ControlPosition.TOP_LEFT].push(this.input);
   }
 
+  onInput(){
+
+  }
 }
