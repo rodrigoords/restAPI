@@ -1,6 +1,5 @@
-#Some setup information :).
+#Spring Rest implementação
 
-##Spring JPA Setup
-You need to change the **application.properties** and configure the login, password and url of your database. 
-  	
-
+##Rest API 
+Projeto que tem como principal objetivo implementar uma API que utilize da arquitetura rest da melhor forma
+possível. Implementando tambem testes automáticos para os metodos implementados.
