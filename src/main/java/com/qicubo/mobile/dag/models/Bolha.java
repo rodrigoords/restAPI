@@ -14,14 +14,16 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.qicubo.mobile.dag.dto.BolhaDTO;
 import com.qicubo.mobile.dag.types.Index;
 import com.qicubo.mobile.dag.types.Latitude;
 import com.qicubo.mobile.dag.types.Longitude;
 
 @Entity
 @Table(name = "dag_bolha")
-public class Bolha {
-    
+public class Bolha{
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name="id_bolha")
@@ -40,6 +42,7 @@ public class Bolha {
 	private Index indice; 
 	private Integer indRestrita;
 	
+	@JsonCreator
 	public Bolha(){
 	}
 	
@@ -90,7 +93,7 @@ public class Bolha {
 	}
 	public void setLatitude(Latitude latitude) {
 		this.latitude = latitude;
-	    ajustaIndice();
+	    this.ajustaIndice();
 	}
 	
 	public Longitude getLongitude() {
@@ -98,7 +101,7 @@ public class Bolha {
 	}
 	public void setLongitude(Longitude longitude) {
 		this.longitude = longitude;
-        ajustaIndice();
+        this.ajustaIndice();
 	}
 	
 	public Index getIndice() {
@@ -227,6 +230,32 @@ public class Bolha {
 		return true;
 	}
     
+    public BolhaDTO toDTO(){
+    	BolhaDTO bolhaDTO = new BolhaDTO();
+    	
+    	bolhaDTO.setDescricao(this.descricao);
+    	bolhaDTO.setDtHoraCriacao(this.dtHoraCriacao);
+    	bolhaDTO.setIndRestrita(this.indRestrita.toString());
+    	bolhaDTO.setLatitude(this.latitude.toString());
+    	bolhaDTO.setLongitude(this.longitude.toString());
+    	bolhaDTO.setNome(this.nome);
+    	bolhaDTO.setTipoNome(this.tipo.getNome());
+    	bolhaDTO.setUsuarioCriacaoLogin(this.usuarioCriacao.getLogin());
+    	
+    	return bolhaDTO;
+    }
     
-
+    public static Bolha fromDTO(BolhaDTO bolhaDTO){
+    	
+        Bolha bolha = new Bolha();
+        
+        bolha.setDescricao(bolhaDTO.getDescricao());
+        bolha.setDtHoraCriacao(bolhaDTO.getDtHoraCriacao());
+        bolha.setIndRestrita(new Integer(bolhaDTO.getIndRestrita()));
+        bolha.setLatitude(new Latitude(bolhaDTO.getLatitude()));
+        bolha.setLongitude(new Longitude(bolhaDTO.getLongitude()));
+        bolha.setNome(bolhaDTO.getNome());
+        
+    	return bolha;
+    }
 }

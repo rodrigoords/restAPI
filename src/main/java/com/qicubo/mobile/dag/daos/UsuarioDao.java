@@ -24,9 +24,11 @@ public class UsuarioDao {
 	      return manager.createQuery("select u from Usuario u", Usuario.class).getResultList();
 	   }
 
-	   public void save(Usuario user)
+	   public Usuario save(Usuario user)
 	   {
 	      manager.persist(user);
+	      manager.flush();
+	      return user;
 	   }
 
 	   public Usuario findById(Long id)

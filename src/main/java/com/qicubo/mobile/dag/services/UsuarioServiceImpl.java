@@ -59,8 +59,8 @@ public class UsuarioServiceImpl implements UsuarioService {
 	}
 
 	@Override
-	public void create(Usuario user) {
-		usuarioDao.save(user);
+	public Usuario create(Usuario user) {
+		return usuarioDao.save(user);
 	}
 
 	@Override

@@ -1,11 +1,12 @@
 package com.qicubo.mobile.dag.controllers;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
+import org.springframework.http.CacheControl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -15,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.util.UriComponentsBuilder;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.qicubo.mobile.dag.dto.BolhaDTO;
 import com.qicubo.mobile.dag.models.Bolha;
@@ -29,6 +30,7 @@ import com.qicubo.mobile.dag.types.Latitude;
 import com.qicubo.mobile.dag.types.Longitude;
 
 @RestController
+@RequestMapping(value=BolhaRestURIConstants.BASE_URI)
 public class BolhaController {
 
     @Autowired
@@ -37,10 +39,8 @@ public class BolhaController {
     private UsuarioService usuarioService;
     @Autowired
     private TipoService tipoService;
-    
-	private ModelMapper mapper = new ModelMapper();
 
-    @RequestMapping(method = RequestMethod.GET, value = BolhaRestURIConstants.GET_ALL_BOLHAS)
+    @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<List<BolhaDTO>> getAllBolhas() {
     	
     	List<BolhaDTO> bolhasDTO = new ArrayList<>();
@@ -52,27 +52,26 @@ public class BolhaController {
         }
         
         for (Bolha bolha : bolhas) {
-        	bolhasDTO.add(mapper.map(bolha, BolhaDTO.class));
+        	bolhasDTO.add(bolha.toDTO());
         }
-
-        return new ResponseEntity<>(bolhasDTO, HttpStatus.OK);
+        
+        
+        return ResponseEntity.status(HttpStatus.OK).body(bolhasDTO);
     }
     
-    @CrossOrigin(origins = "http://localhost:8100")
+    @CrossOrigin()
     @RequestMapping(method = RequestMethod.GET, value = BolhaRestURIConstants.GET_BOLHA_BY_ID)
     public ResponseEntity<BolhaDTO> getBolhaById(@PathVariable("id") Long id) {
         Bolha bolha = bolhaService.findById(id);
-        if (bolha == null) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
+                
+        BolhaDTO bolhaDTO = bolha.toDTO();
         
-        BolhaDTO bolhaDTO = new BolhaDTO(); 
-        bolhaDTO = mapper.map(bolha, BolhaDTO.class );
+        CacheControl cacheControl = CacheControl.maxAge(30, TimeUnit.SECONDS);
         
-        return new ResponseEntity<>(bolhaDTO, HttpStatus.OK);
+        return ResponseEntity.status(HttpStatus.OK).cacheControl(cacheControl).body(bolhaDTO);
     }
     
-    @CrossOrigin(origins = "http://localhost:8100")
+    @CrossOrigin()
     @RequestMapping(method = RequestMethod.GET, value = BolhaRestURIConstants.GET_BOLHA_IN_RANGE)
     public ResponseEntity<List<BolhaDTO>> getCloserBolhas(@RequestParam(value = "lat", required = true) String lat,
             										      @RequestParam(value = "longi", required = true) String longi) {
@@ -89,13 +88,13 @@ public class BolhaController {
         List<BolhaDTO> bolhasDTO = new ArrayList<>();
         
         for (Bolha bolha : bolhas){
-        	bolhasDTO.add(mapper.map(bolha, BolhaDTO.class));
+        	bolhasDTO.add(bolha.toDTO());
         }
         
         return new ResponseEntity<>(bolhasDTO, HttpStatus.OK);
     }
     
-    @CrossOrigin(origins = "http://localhost:8100")
+    @CrossOrigin()
     @RequestMapping(method = RequestMethod.GET, value = BolhaRestURIConstants.GET_BOLHA_BY_USER_LOGIN)
     public ResponseEntity<List<BolhaDTO>> getBolhaByUser(@PathVariable("login") String login) {
 
@@ -113,25 +112,17 @@ public class BolhaController {
         List<BolhaDTO> bolhasDTO = new ArrayList<>();
         
         for (Bolha bolha : bolhas){
-        	bolhasDTO.add(mapper.map(bolha, BolhaDTO.class));
+        	bolhasDTO.add(bolha.toDTO());
         }
         
         return new ResponseEntity<>(bolhasDTO, HttpStatus.OK);
     }
     
-    @CrossOrigin(origins = "http://localhost:8100")
-    @RequestMapping(method = RequestMethod.POST, value = BolhaRestURIConstants.CREATE_BOLHA)
-    public ResponseEntity<Void> createBolha(@RequestBody BolhaDTO bolhaDTO, UriComponentsBuilder ucBuilder) {
+    @CrossOrigin()
+    @RequestMapping(method = RequestMethod.POST)
+    public ResponseEntity<Void> createBolha(@RequestBody BolhaDTO bolhaDTO) {
         
-        Bolha bolha = new Bolha();
-        
-        bolha.setDescricao(bolhaDTO.getDescricao());
-        bolha.setDtHoraCriacao(bolhaDTO.getDtHoraCriacao());
-        bolha.setIndRestrita(new Integer(bolhaDTO.getIndRestrita()));
-        bolha.setLatitude(new Latitude(bolhaDTO.getLatitude()));
-        bolha.setLongitude(new Longitude(bolhaDTO.getLongitude()));
-        bolha.setNome(bolhaDTO.getNome());
-        
+        Bolha bolha = Bolha.fromDTO(bolhaDTO);
         
         Tipo tipo = tipoService.findByName(bolhaDTO.getTipoNome());
 
@@ -147,21 +138,19 @@ public class BolhaController {
 
         bolha.setUsuarioCriacao(usuario);
         bolha.setTipo(tipo);
-
-        if (bolhaService.isBolhaExist(bolha)) {
-            return new ResponseEntity<>(HttpStatus.CONFLICT);
-        }
+        
+        //Verifica se existe uma bolha
+        bolhaService.bolhaExist(bolha);
 
         Index indice = new Index(
-                bolha.getLatitude().bigDecimalValue().subtract(bolha.getLongitude().bigDecimalValue()).toString());
+                bolha.getLatitude().bigDecimalValue().add(bolha.getLongitude().bigDecimalValue()).toString());
 
         bolha.setIndice(indice);
 
-        bolhaService.create(bolha);
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.setLocation(ucBuilder.path(BolhaRestURIConstants.CREATE_BOLHA).buildAndExpand(bolha.getId()).toUri());
-        return new ResponseEntity<>(headers, HttpStatus.CREATED);
+        bolha = bolhaService.create(bolha);
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(bolha.getId()).toUri();
+        return ResponseEntity.created(uri).build();
+        
     }
 
 }

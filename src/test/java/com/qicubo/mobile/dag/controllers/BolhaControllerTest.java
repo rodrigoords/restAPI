@@ -2,6 +2,7 @@ package com.qicubo.mobile.dag.controllers;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -23,10 +24,13 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import com.qicubo.mobile.dag.builders.BolhaBuilder;
 import com.qicubo.mobile.dag.dto.BolhaDTO;
+import com.qicubo.mobile.dag.handler.ControllersExceptionHandler;
 import com.qicubo.mobile.dag.models.Bolha;
 import com.qicubo.mobile.dag.services.BolhaService;
 import com.qicubo.mobile.dag.services.TipoService;
 import com.qicubo.mobile.dag.services.UsuarioService;
+import com.qicubo.mobile.dag.services.exceptions.BolhaExistenteException;
+import com.qicubo.mobile.dag.services.exceptions.BolhaNaoEncontradaException;
 import com.qicubo.mobile.dag.types.Latitude;
 import com.qicubo.mobile.dag.types.Longitude;
 import com.qicubo.mobile.dag.utils.TestUtil;
@@ -57,8 +61,10 @@ public class BolhaControllerTest {
 	
 	@Before
 	public void setUp(){
-		
-		mockMvc = MockMvcBuilders.standaloneSetup(bolhaController).build();
+		//Crio o mockMvc para controlar os testes, e seto o Controller Advice para controlar as exceptions
+		mockMvc = MockMvcBuilders.standaloneSetup(bolhaController)
+								 .setControllerAdvice(new ControllersExceptionHandler())
+								 .build();
 		
 		Bolha bolhaA = new BolhaBuilder("Bolha A Test").build();
 		Bolha bolhaB = new BolhaBuilder("Bolha B Test").build();
@@ -81,7 +87,7 @@ public class BolhaControllerTest {
 	public void getAllBolhas() throws Exception {
 		Mockito.when(bolhaService.findAll()).thenReturn(listaBolhas);
 		
-		mockMvc.perform(get(BolhaRestURIConstants.GET_ALL_BOLHAS))
+		mockMvc.perform(get(TestUtil.GET_ALL_BOLHAS_URI))
 												 .andExpect(status().isOk())
 												 .andExpect(jsonPath("$", Matchers.hasSize(3)))
 												 .andExpect(jsonPath("$[*].usuarioCriacaoLogin", Matchers.containsInAnyOrder(listaBolhas.get(0).getUsuarioCriacao().getLogin(),
@@ -99,7 +105,7 @@ public class BolhaControllerTest {
 	public void getAllBolhasNoContent() throws Exception{
 		Mockito.when(bolhaService.findAll()).thenReturn(new ArrayList<Bolha>());
 		
-		mockMvc.perform(get(BolhaRestURIConstants.GET_ALL_BOLHAS)).andExpect(status().isNoContent());
+		mockMvc.perform(get(TestUtil.GET_ALL_BOLHAS_URI)).andExpect(status().isNoContent());
 		
 		Mockito.verify(bolhaService, Mockito.times(1)).findAll();
 		Mockito.verifyNoMoreInteractions(bolhaService);
@@ -113,12 +119,12 @@ public class BolhaControllerTest {
 		
 		Mockito.when(bolhaService.findById(bolha.getId())).thenReturn(bolha);
 		
-		mockMvc.perform(get(BolhaRestURIConstants.GET_BOLHA_BY_ID, bolha.getId()))
+		mockMvc.perform(get(TestUtil.GET_BOLHAS_BY_ID_URI, bolha.getId()))
 											     .andExpect(status().isOk())
 											     .andExpect(jsonPath("$.nome", Matchers.is(bolha.getNome())))
 											     .andExpect(jsonPath("$.descricao", Matchers.is(bolha.getDescricao())))
 											     .andExpect(jsonPath("$.usuarioCriacaoLogin", Matchers.is(bolha.getUsuarioCriacao().getLogin())))
-											     .andExpect(jsonPath("$tipoNome", Matchers.is(bolha.getTipo().getNome())))
+											     .andExpect(jsonPath("$.tipoNome", Matchers.is(bolha.getTipo().getNome())))
 											     .andExpect(jsonPath("$.dtHoraCriacao", Matchers.is(bolha.getDtHoraCriacao())))
 											     .andExpect(jsonPath("$.latitude", Matchers.hasToString(bolha.getLatitude().toString())))
 											     .andExpect(jsonPath("$.longitude", Matchers.hasToString(bolha.getLongitude().toString())))
@@ -129,14 +135,14 @@ public class BolhaControllerTest {
 	}
 	
 	@Test
-	public void getBolhaByIdNoContent() throws Exception{
+	public void getBolhaByIdNotFound() throws Exception{
 		Bolha bolha = new BolhaBuilder("Bolha Teste API").build();
 		bolha.setId(1L);
 		
-		Mockito.when(bolhaService.findById(bolha.getId())).thenReturn(null);
-		
-		mockMvc.perform(get(BolhaRestURIConstants.GET_BOLHA_BY_ID, bolha.getId()))
-											     .andExpect(status().isNoContent());
+	    Mockito.when(bolhaService.findById(bolha.getId())).thenThrow(new BolhaNaoEncontradaException("Não foi possível localizar a bolha."));
+	    
+		mockMvc.perform(get(TestUtil.GET_BOLHAS_BY_ID_URI, bolha.getId()))
+											     .andExpect(status().isNotFound());
 											     
 		Mockito.verify(bolhaService, Mockito.times(1)).findById(bolha.getId());
 		Mockito.verifyNoMoreInteractions(bolhaService);	
@@ -152,7 +158,7 @@ public class BolhaControllerTest {
 		Mockito.when(bolhaService.findBolhaByUser(bolha.getUsuarioCriacao())).thenReturn(bolhas);
 		Mockito.when(usuarioService.findByLogin(bolha.getUsuarioCriacao().getLogin())).thenReturn(bolha.getUsuarioCriacao());
 		
-		mockMvc.perform(get(BolhaRestURIConstants.GET_BOLHA_BY_USER_LOGIN, bolha.getUsuarioCriacao().getLogin()))
+		mockMvc.perform(get(TestUtil.GET_BOLHAS_BY_USER_LOGIN_URI, bolha.getUsuarioCriacao().getLogin()))
 											     .andExpect(status().isOk())
 											     .andExpect(jsonPath("$[0].nome", Matchers.is(bolha.getNome())))
 											     .andExpect(jsonPath("$[0].descricao", Matchers.is(bolha.getDescricao())))
@@ -174,7 +180,7 @@ public class BolhaControllerTest {
 		String login = "LoginTest";
 		Mockito.when(usuarioService.findByLogin(login)).thenReturn(null);
 		
-		mockMvc.perform(get(BolhaRestURIConstants.GET_BOLHA_BY_USER_LOGIN, login)).andExpect(status().isFailedDependency());
+		mockMvc.perform(get(TestUtil.GET_BOLHAS_BY_USER_LOGIN_URI, login)).andExpect(status().isFailedDependency());
 
 		Mockito.verify(usuarioService, Mockito.times(1)).findByLogin(login);
 	}
@@ -189,7 +195,7 @@ public class BolhaControllerTest {
 		Mockito.when(usuarioService.findByLogin(bolha.getUsuarioCriacao().getLogin())).thenReturn(bolha.getUsuarioCriacao());
 		Mockito.when(bolhaService.findBolhaByUser(bolha.getUsuarioCriacao())).thenReturn(bolhas);
 
-		mockMvc.perform(get(BolhaRestURIConstants.GET_BOLHA_BY_USER_LOGIN, bolha.getUsuarioCriacao().getLogin()))
+		mockMvc.perform(get(TestUtil.GET_BOLHAS_BY_USER_LOGIN_URI, bolha.getUsuarioCriacao().getLogin()))
 	     										 .andExpect(status().isNoContent());
 		
 		Mockito.verify(usuarioService, Mockito.times(1)).findByLogin(bolha.getUsuarioCriacao().getLogin());
@@ -206,7 +212,7 @@ public class BolhaControllerTest {
 		
 		Mockito.when(bolhaService.findAllCloserBolhas(latitudeTest, longitudeTest)).thenReturn(listaBolhas);
 		
-		mockMvc.perform(get(BolhaRestURIConstants.GET_BOLHA_IN_RANGE)
+		mockMvc.perform(get(TestUtil.GET_BOLHAS_IN_RANGE_URI)
 												 .param("lat", latitudeTest.toString())
 												 .param("longi", longitudeTest.toString()))
 		                                         .andExpect(status().isOk())
@@ -233,7 +239,7 @@ public class BolhaControllerTest {
         
         Mockito.when(bolhaService.findAllCloserBolhas(latitudeTest, longitudeTest)).thenReturn(new ArrayList<Bolha>());
         
-        mockMvc.perform(get(BolhaRestURIConstants.GET_BOLHA_IN_RANGE)
+        mockMvc.perform(get(TestUtil.GET_BOLHAS_IN_RANGE_URI)
                 .param("lat", latitudeTest.toString())
                 .param("longi", longitudeTest.toString()))
                 .andExpect(status().isNoContent());
@@ -243,25 +249,29 @@ public class BolhaControllerTest {
 	}
 	
 	@Test
-	public void CreateBolha() throws Exception{
+	public void createBolha() throws Exception{
 		
 		ModelMapper mapper = new ModelMapper();
 		
 	    Bolha bolha = new BolhaBuilder("Bolha Teste API").build();
+	    bolha.setId(1L);
+	    
+	    String location = TestUtil.BASE_URL + TestUtil.BASE_URI + "/" + bolha.getId();
 	    
 	    bolhaDTO = mapper.map(bolha, BolhaDTO.class);
 	    
 	    Mockito.when(tipoService.findByName(bolhaDTO.getTipoNome())).thenReturn(bolha.getTipo());
 	    Mockito.when(usuarioService.findByLogin(bolhaDTO.getUsuarioCriacaoLogin())).thenReturn(bolha.getUsuarioCriacao());
-	    Mockito.when(bolhaService.isBolhaExist(bolha)).thenReturn(false);
+	    Mockito.when(bolhaService.create(bolha)).thenReturn(bolha);
 	    
-        mockMvc.perform(post(BolhaRestURIConstants.CREATE_BOLHA).contentType(TestUtil.APPLICATION_JSON_UTF8)
+        mockMvc.perform(post(TestUtil.CREATE_BOLHA_URI).contentType(TestUtil.APPLICATION_JSON_UTF8)
         														.content(TestUtil.convertObjectToJsonBytes(bolhaDTO)))
-                                                  				.andExpect(status().isCreated());
+                                                  				.andExpect(status().isCreated())
+                                                  				.andExpect(header().string("Location", location));
         
         Mockito.verify(tipoService, Mockito.times(1)).findByName(bolhaDTO.getTipoNome());
         Mockito.verify(usuarioService, Mockito.times(1)).findByLogin(bolhaDTO.getUsuarioCriacaoLogin());
-        Mockito.verify(bolhaService, Mockito.times(1)).isBolhaExist(bolha);
+        Mockito.verify(bolhaService, Mockito.times(1)).bolhaExist(bolha);
         Mockito.verify(bolhaService, Mockito.times(1)).create(bolha);
         Mockito.verifyNoMoreInteractions(tipoService);
         Mockito.verifyNoMoreInteractions(usuarioService);
@@ -269,7 +279,7 @@ public class BolhaControllerTest {
 	}
 	
 	@Test
-	public void CreateBolhaWithoutTipo() throws Exception{
+	public void createBolhaWithoutTipo() throws Exception{
 		
 	    Bolha bolha = new BolhaBuilder("Bolha Teste API").build();
 	    bolha.setTipo(null);
@@ -278,15 +288,15 @@ public class BolhaControllerTest {
 	    
 	    Mockito.when(tipoService.findByName(bolhaDTO.getTipoNome())).thenReturn(bolha.getTipo());
 	    Mockito.when(usuarioService.findByLogin(bolhaDTO.getUsuarioCriacaoLogin())).thenReturn(bolha.getUsuarioCriacao());
-	    Mockito.when(bolhaService.isBolhaExist(bolha)).thenReturn(false);
 	    
-        mockMvc.perform(post(BolhaRestURIConstants.CREATE_BOLHA).contentType(TestUtil.APPLICATION_JSON_UTF8)
+	    
+        mockMvc.perform(post(TestUtil.CREATE_BOLHA_URI).contentType(TestUtil.APPLICATION_JSON_UTF8)
         														.content(TestUtil.convertObjectToJsonBytes(bolhaDTO)))
                                                   				.andExpect(status().isFailedDependency());
         
         Mockito.verify(tipoService, Mockito.times(1)).findByName(bolhaDTO.getTipoNome());
         Mockito.verify(usuarioService, Mockito.times(0)).findByLogin(bolhaDTO.getUsuarioCriacaoLogin());
-        Mockito.verify(bolhaService, Mockito.times(0)).isBolhaExist(bolha);
+        Mockito.verify(bolhaService, Mockito.times(0)).bolhaExist(bolha);
         Mockito.verify(bolhaService, Mockito.times(0)).create(bolha);
         Mockito.verifyNoMoreInteractions(tipoService);
         Mockito.verifyNoMoreInteractions(usuarioService);
@@ -294,7 +304,7 @@ public class BolhaControllerTest {
 	}
 	
 	@Test
-	public void CreateBolhaWithoutUserLogin() throws Exception{
+	public void createBolhaWithoutUserLogin() throws Exception{
 		
 	    Bolha bolha = new BolhaBuilder("Bolha Teste API").build();
 	    bolha.setUsuarioCriacao(null);
@@ -303,15 +313,15 @@ public class BolhaControllerTest {
 	    
 	    Mockito.when(tipoService.findByName(bolhaDTO.getTipoNome())).thenReturn(bolha.getTipo());
 	    Mockito.when(usuarioService.findByLogin(bolhaDTO.getUsuarioCriacaoLogin())).thenReturn(bolha.getUsuarioCriacao());
-	    Mockito.when(bolhaService.isBolhaExist(bolha)).thenReturn(false);
 	    
-        mockMvc.perform(post(BolhaRestURIConstants.CREATE_BOLHA).contentType(TestUtil.APPLICATION_JSON_UTF8)
+	    
+        mockMvc.perform(post(TestUtil.CREATE_BOLHA_URI).contentType(TestUtil.APPLICATION_JSON_UTF8)
         														.content(TestUtil.convertObjectToJsonBytes(bolhaDTO)))
                                                   				.andExpect(status().isFailedDependency());
         
         Mockito.verify(tipoService, Mockito.times(1)).findByName(bolhaDTO.getTipoNome());
         Mockito.verify(usuarioService, Mockito.times(1)).findByLogin(bolhaDTO.getUsuarioCriacaoLogin());
-        Mockito.verify(bolhaService, Mockito.times(0)).isBolhaExist(bolha);
+        Mockito.verify(bolhaService, Mockito.times(0)).bolhaExist(bolha);
         Mockito.verify(bolhaService, Mockito.times(0)).create(bolha);
         Mockito.verifyNoMoreInteractions(tipoService);
         Mockito.verifyNoMoreInteractions(usuarioService);
@@ -327,15 +337,15 @@ public class BolhaControllerTest {
 	    
 	    Mockito.when(tipoService.findByName(bolhaDTO.getTipoNome())).thenReturn(bolha.getTipo());
 	    Mockito.when(usuarioService.findByLogin(bolhaDTO.getUsuarioCriacaoLogin())).thenReturn(bolha.getUsuarioCriacao());
-	    Mockito.when(bolhaService.isBolhaExist(bolha)).thenReturn(true);
+	    Mockito.doThrow(new BolhaExistenteException("A bolha a ser criada já existe.")).when(bolhaService).bolhaExist(bolha);
 	    
-        mockMvc.perform(post(BolhaRestURIConstants.CREATE_BOLHA).contentType(TestUtil.APPLICATION_JSON_UTF8)
+        mockMvc.perform(post(TestUtil.CREATE_BOLHA_URI).contentType(TestUtil.APPLICATION_JSON_UTF8)
         														.content(TestUtil.convertObjectToJsonBytes(bolhaDTO)))
                                                   				.andExpect(status().isConflict());
         
         Mockito.verify(tipoService, Mockito.times(1)).findByName(bolhaDTO.getTipoNome());
         Mockito.verify(usuarioService, Mockito.times(1)).findByLogin(bolhaDTO.getUsuarioCriacaoLogin());
-        Mockito.verify(bolhaService, Mockito.times(1)).isBolhaExist(bolha);
+        Mockito.verify(bolhaService, Mockito.times(1)).bolhaExist(bolha);
         Mockito.verify(bolhaService, Mockito.times(0)).create(bolha);
         Mockito.verifyNoMoreInteractions(tipoService);
         Mockito.verifyNoMoreInteractions(usuarioService);

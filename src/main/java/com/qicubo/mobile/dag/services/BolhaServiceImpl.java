@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 import com.qicubo.mobile.dag.daos.BolhaDao;
 import com.qicubo.mobile.dag.models.Bolha;
 import com.qicubo.mobile.dag.models.Usuario;
+import com.qicubo.mobile.dag.services.exceptions.BolhaExistenteException;
+import com.qicubo.mobile.dag.services.exceptions.BolhaNaoEncontradaException;
 import com.qicubo.mobile.dag.types.Index;
 import com.qicubo.mobile.dag.types.Latitude;
 import com.qicubo.mobile.dag.types.Longitude;
@@ -27,12 +29,17 @@ public class BolhaServiceImpl implements BolhaService {
 
 	@Override
 	public Bolha findById(Long id) {
-		return bolhaDao.findById(id);
+		Bolha bolha = bolhaDao.findById(id);
+		
+		if(bolha == null){
+        	throw new BolhaNaoEncontradaException("Não foi possível localizar a bolha.");
+        }
+		return  bolha;
 	}
 
 	@Override
-	public void create(Bolha bolha) {
-		bolhaDao.save(bolha);
+	public Bolha create(Bolha bolha) {
+		return bolhaDao.save(bolha);
 	}
 
 	@Override
@@ -52,16 +59,20 @@ public class BolhaServiceImpl implements BolhaService {
 		return bolhaDao.all();
 	}
 	@Override
-	public boolean isBolhaExist(Bolha bolha) {
+	public void bolhaExist(Bolha bolha) {
 		List<Bolha> bolhas = findBolhaByUser(bolha.getUsuarioCriacao());
-		return !bolhas.isEmpty();
+		
+        if (!bolhas.isEmpty()) {
+            throw new BolhaExistenteException("A bolha a ser criada já existe.");
+        }
+
 	}
 
 	@Override
 	public List<Bolha> findAllCloserBolhas(Latitude latitude, Longitude longitude) {
 		
 	    BigDecimal distancia;
-	    Index indice = latitude.indexValue().subtract(longitude.indexValue());
+	    Index indice = latitude.indexValue().add(longitude.indexValue());
 	    
 	    List<Bolha> bolhas = new ArrayList<>();
 	    

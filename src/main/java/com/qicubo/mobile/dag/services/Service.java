@@ -8,9 +8,9 @@ public interface Service<T> {
     
     T findById(Long id);
     
-    void create(T bolha);
+    T create(T entidade);
     
-    void update(T bolha);
+    void update(T entidade);
      
     void deleteById(Long id); 
     

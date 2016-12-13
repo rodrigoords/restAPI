@@ -13,6 +13,6 @@ public interface BolhaService extends Service<Bolha>{
     
     List<Bolha> findAllCloserBolhas(Latitude latitude, Longitude longitude);
     
-    public boolean isBolhaExist(Bolha bolha);
+    public void bolhaExist(Bolha bolha);
      
 }

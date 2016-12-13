@@ -6,20 +6,15 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.IntegrationTest;
-import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
 
-import com.qicubo.mobile.dag.Boot;
 import com.qicubo.mobile.dag.builders.UsuarioBuilder;
 import com.qicubo.mobile.dag.daos.UsuarioDao;
 import com.qicubo.mobile.dag.models.Usuario;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = Boot.class)
-@WebAppConfiguration
-@IntegrationTest
+@SpringBootTest
 @Transactional
 public class UsuarioServiceImplTest {
 

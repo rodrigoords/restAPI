@@ -49,8 +49,10 @@ public class BolhaDao {
 	    return query.getResultList();
 	}
 	
-	public void save(Bolha bolha) {
+	public Bolha save(Bolha bolha) {
 		manager.persist(bolha);
+		manager.flush();
+		return bolha;
 	}
 
 	public Bolha findById(Long id) {
