@@ -20,8 +20,11 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import com.qicubo.mobile.dag.builders.TipoBuilder;
+import com.qicubo.mobile.dag.handler.ControllersExceptionHandler;
 import com.qicubo.mobile.dag.models.Tipo;
 import com.qicubo.mobile.dag.services.TipoService;
+import com.qicubo.mobile.dag.services.exceptions.TipoNaoEncontradoException;
+import com.qicubo.mobile.dag.utils.TestUtil;
 
 @RunWith(MockitoJUnitRunner.class)
 public class TipoControllerTest {
@@ -41,7 +44,7 @@ public class TipoControllerTest {
 	@Before
 	public void setUp() {
 				
-		mockMvc = MockMvcBuilders.standaloneSetup(tipoController).build();
+		mockMvc = MockMvcBuilders.standaloneSetup(tipoController).setControllerAdvice(new ControllersExceptionHandler()).build();
 
 		Tipo tipoA = new TipoBuilder("Balada").build();
 		Tipo tipoB = new TipoBuilder("Estudos").build();
@@ -59,7 +62,7 @@ public class TipoControllerTest {
 	public void getAllTipos() throws Exception {
 		Mockito.when(tipoService.findAll()).thenReturn(listaTipos);
 		//
-		mockMvc.perform(get(TipoRestURIConstants.GET_ALL_TIPOS)).andExpect(status().isOk())
+		mockMvc.perform(get(TipoRestURIConstants.URI_BASE)).andExpect(status().isOk())
 																.andExpect(jsonPath("$", Matchers.hasSize(3)))
 																.andExpect(jsonPath("$[*].nome", Matchers.containsInAnyOrder(listaTipos.get(0).getNome(),
 																															 listaTipos.get(1).getNome(),
@@ -76,7 +79,7 @@ public class TipoControllerTest {
 	public void getAllTiposNoContent() throws Exception{
 		Mockito.when(tipoService.findAll()).thenReturn(new ArrayList<Tipo>());
 		//
-		mockMvc.perform(get(TipoRestURIConstants.GET_ALL_TIPOS)).andExpect(status().isNoContent());
+		mockMvc.perform(get(TipoRestURIConstants.URI_BASE)).andExpect(status().isNoContent());
 		//
 		Mockito.verify(tipoService, Mockito.times(1)).findAll();
 		Mockito.verifyNoMoreInteractions(tipoService);
@@ -90,7 +93,7 @@ public class TipoControllerTest {
 		
 		Mockito.when(tipoService.findByName(tipo.getNome())).thenReturn(tipo);
 		
-		mockMvc.perform(get(TipoRestURIConstants.GET_TIPO_BY_NAME, tipo.getNome()))
+		mockMvc.perform(get(TestUtil.GET_TIPO_BY_NAME, tipo.getNome()))
 										        .andExpect(status().isOk())
 										        .andExpect(jsonPath("$.nome", Matchers.is(tipo.getNome())))
 										        .andExpect(jsonPath("$.descricao", Matchers.is(tipo.getDescricao())));
@@ -104,12 +107,10 @@ public class TipoControllerTest {
 		
 		tipo = new TipoBuilder("Balada").build();
 		tipo.setId(1L);
-		Mockito.when(tipoService.findByName(tipo.getNome())).thenReturn(null);
+		Mockito.when(tipoService.findByName(tipo.getNome())).thenThrow(new TipoNaoEncontradoException("Tipo não foi encontrado!"));
 		
-		mockMvc.perform(get(TipoRestURIConstants.GET_TIPO_BY_NAME, tipo.getNome())).andExpect(status().isNoContent());
+		mockMvc.perform(get(TestUtil.GET_TIPO_BY_NAME, tipo.getNome())).andExpect(status().isNotFound());
 		
-		Mockito.verify(tipoService, Mockito.times(1)).findByName(tipo.getNome());
-		Mockito.verifyNoMoreInteractions(tipoService);
 	}
 	
 

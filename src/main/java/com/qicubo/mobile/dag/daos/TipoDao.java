@@ -31,13 +31,21 @@ public class TipoDao {
         return manager.find(Tipo.class, id);
     }
        
-	public Tipo findByNome(String nome) throws NoResultException{
+	public Tipo findByNome(String nome){
+		
+		Tipo tipo;
 		
 		TypedQuery<Tipo> query = manager.createQuery("select t from Tipo t "
 										+ "where t.nome = :nome", Tipo.class);
 		query.setParameter("nome", nome);
     	
-    	return query.getSingleResult(); 
+		try{
+			tipo = query.getSingleResult();
+		}catch (NoResultException e) {
+			return null;
+		}
+		
+    	return tipo;
     }
     
     public void remove(Tipo tipo) {

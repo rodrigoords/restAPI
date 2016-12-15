@@ -62,6 +62,12 @@ public class TipoDaoTest {
     }
 
     @Test
+    public void findTipoByNomeNotExist(){
+    	tipo = new TipoBuilder().build();
+    	Assert.assertNull(tipoDao.findByNome(tipo.getNome()));
+    }
+    
+    @Test
     public void saveTipo() {
 
         tipo = new TipoBuilder().build();
@@ -104,5 +110,5 @@ public class TipoDaoTest {
 
         Assert.assertEquals(descricaoTest, tipo.getDescricao());
     }
-
+    
 }

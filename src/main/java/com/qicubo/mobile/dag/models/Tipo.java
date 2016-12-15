@@ -9,6 +9,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.qicubo.mobile.dag.dto.TipoDTO;
+
 @Entity
 @Table(name = "dag_tipo")
 public class Tipo {
@@ -51,6 +53,23 @@ public class Tipo {
 
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;
+	}
+	
+	public TipoDTO toDTO(){
+		
+		TipoDTO tipoDTO= new TipoDTO();
+		tipoDTO.setNome(this.nome);
+		tipoDTO.setDescricao(this.descricao);
+		
+		return tipoDTO;
+	}
+	
+	public static Tipo fromDTO(TipoDTO tipoDTO){
+		Tipo tipo = new Tipo();
+		tipo.descricao = tipoDTO.getDescricao();
+		tipo.nome = tipoDTO.getNome();
+		
+		return tipo;
 	}
 
 }

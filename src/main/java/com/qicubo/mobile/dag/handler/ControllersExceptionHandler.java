@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import com.qicubo.mobile.dag.models.DetalhesErro;
 import com.qicubo.mobile.dag.services.exceptions.BolhaExistenteException;
 import com.qicubo.mobile.dag.services.exceptions.BolhaNaoEncontradaException;
+import com.qicubo.mobile.dag.services.exceptions.TipoNaoEncontradoException;
 
 @ControllerAdvice
 public class ControllersExceptionHandler {
@@ -33,6 +34,19 @@ public class ControllersExceptionHandler {
 		detalhesErro.setStatus(HttpStatus.CONFLICT);
 		detalhesErro.setTitulo("A bolha já existe");
 		detalhesErro.setMsgDetalhes("http://qisi.com.br/doc/erro/409");
+		detalhesErro.setTimestamp(System.currentTimeMillis());
+		
+		return ResponseEntity.status(detalhesErro.getStatus()).body(detalhesErro);
+	}
+	
+	@ExceptionHandler(TipoNaoEncontradoException.class)
+	public ResponseEntity<DetalhesErro> handleTipoNaoEncontradoException(TipoNaoEncontradoException e, HttpServletRequest resques){
+		
+		DetalhesErro detalhesErro = new DetalhesErro();
+		
+		detalhesErro.setStatus(HttpStatus.NOT_FOUND);
+		detalhesErro.setTitulo("Tipo não pode ser encontrada");
+		detalhesErro.setMsgDetalhes("http://qisi.com.br/doc/erro/404");
 		detalhesErro.setTimestamp(System.currentTimeMillis());
 		
 		return ResponseEntity.status(detalhesErro.getStatus()).body(detalhesErro);

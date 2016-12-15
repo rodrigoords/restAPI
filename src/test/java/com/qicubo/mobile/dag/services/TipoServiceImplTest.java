@@ -36,4 +36,5 @@ public class TipoServiceImplTest {
         tipo = new TipoBuilder().build();
         Assert.assertFalse(tipoService.isTipoExist(tipo));
     }
+    
 }

@@ -18,5 +18,4 @@ public class TipoDTO {
 		this.descricao = descricao;
 	}
 	
-	
 }

@@ -63,12 +63,10 @@ public class BolhaController {
     @RequestMapping(method = RequestMethod.GET, value = BolhaRestURIConstants.GET_BOLHA_BY_ID)
     public ResponseEntity<BolhaDTO> getBolhaById(@PathVariable("id") Long id) {
         Bolha bolha = bolhaService.findById(id);
-                
-        BolhaDTO bolhaDTO = bolha.toDTO();
         
         CacheControl cacheControl = CacheControl.maxAge(30, TimeUnit.SECONDS);
         
-        return ResponseEntity.status(HttpStatus.OK).cacheControl(cacheControl).body(bolhaDTO);
+        return ResponseEntity.status(HttpStatus.OK).cacheControl(cacheControl).body(bolha.toDTO());
     }
     
     @CrossOrigin()

@@ -3,10 +3,10 @@ package com.qicubo.mobile.dag.controllers;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -17,14 +17,14 @@ import com.qicubo.mobile.dag.models.Tipo;
 import com.qicubo.mobile.dag.services.TipoService;
 
 @RestController
+@RequestMapping(value=TipoRestURIConstants.URI_BASE)
 public class TipoController {
 
 	@Autowired
 	private TipoService tipoService;
 	
-	private ModelMapper mapper = new ModelMapper();
-	
-	@RequestMapping(method = RequestMethod.GET, value=TipoRestURIConstants.GET_ALL_TIPOS)
+	@CrossOrigin()
+	@RequestMapping(method = RequestMethod.GET)
 	public ResponseEntity<List<TipoDTO>> list() {
 		
 	    List<Tipo> tipos = tipoService.findAll();
@@ -36,22 +36,18 @@ public class TipoController {
 	    List<TipoDTO> tiposDTO = new ArrayList<>();
 	    
 	    for(Tipo tipo : tipos){
-	    	tiposDTO.add(mapper.map(tipo, TipoDTO.class));
+	    	tiposDTO.add(tipo.toDTO());
 	    }
 	    
 		return new ResponseEntity<List<TipoDTO>>(tiposDTO, HttpStatus.OK);
 	}
 	
+	@CrossOrigin()
 	@RequestMapping(method = RequestMethod.GET, value = TipoRestURIConstants.GET_TIPO_BY_NAME)
 	public ResponseEntity<TipoDTO> getTipoByName(@PathVariable("name") String name) {
 		Tipo tipo = tipoService.findByName(name);
-		if (tipo == null){
-			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-		}
-		
-		TipoDTO tipoDTO = mapper.map(tipo, TipoDTO.class);
-		
-		return new ResponseEntity<>(tipoDTO, HttpStatus.OK);
+
+		return new ResponseEntity<>(tipo.toDTO(), HttpStatus.OK);
 	}
 	
 }
