@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import com.qicubo.mobile.dag.daos.UsuarioDao;
 import com.qicubo.mobile.dag.models.Usuario;
+import com.qicubo.mobile.dag.services.exceptions.UsuarioNaoEncontradoException;
 
 @Transactional
 @Service("usuarioService")
@@ -27,7 +28,7 @@ public class UsuarioServiceImpl implements UsuarioService {
 			user = usuarioDao.findByLogin(login);
 		} catch (NoResultException ex) {
 		    log.log(Level.INFO, "No data found in find by login query", ex);
-			user = null;
+			throw new UsuarioNaoEncontradoException("Usuario inválido ou não informado!");
 		} catch (Exception ex) {
 			log.log(Level.SEVERE, ex.toString(), ex);
 		}

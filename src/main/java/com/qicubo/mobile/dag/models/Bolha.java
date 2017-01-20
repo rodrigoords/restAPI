@@ -14,6 +14,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.springframework.hateoas.Identifiable;
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.qicubo.mobile.dag.dto.BolhaDTO;
 import com.qicubo.mobile.dag.types.Index;
@@ -22,7 +24,7 @@ import com.qicubo.mobile.dag.types.Longitude;
 
 @Entity
 @Table(name = "dag_bolha")
-public class Bolha{
+public class Bolha implements Identifiable<Long>{
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)

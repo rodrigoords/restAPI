@@ -12,6 +12,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import com.qicubo.mobile.dag.builders.UsuarioBuilder;
 import com.qicubo.mobile.dag.daos.UsuarioDao;
 import com.qicubo.mobile.dag.models.Usuario;
+import com.qicubo.mobile.dag.services.exceptions.UsuarioNaoEncontradoException;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest
@@ -49,11 +50,11 @@ public class UsuarioServiceImplTest {
         Assert.assertTrue(usuario.equals(usuarioPersistido));
     }
 
-    @Test
+    @Test(expected=UsuarioNaoEncontradoException.class)
     public void findUsuarioByLoginReturnNull() {
         usuario = new UsuarioBuilder().build();
         
-        Assert.assertNull(usuarioService.findByLogin(usuario.getLogin()));        
+        usuarioService.findByLogin(usuario.getLogin());        
 
     }
 }

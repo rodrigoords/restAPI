@@ -4,13 +4,16 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import com.qicubo.mobile.dag.models.DetalhesErro;
 import com.qicubo.mobile.dag.services.exceptions.BolhaExistenteException;
 import com.qicubo.mobile.dag.services.exceptions.BolhaNaoEncontradaException;
+import com.qicubo.mobile.dag.services.exceptions.TipoBolhaNullException;
 import com.qicubo.mobile.dag.services.exceptions.TipoNaoEncontradoException;
+import com.qicubo.mobile.dag.services.exceptions.UsuarioBolhaNullException;
 
 @ControllerAdvice
 public class ControllersExceptionHandler {
@@ -51,4 +54,56 @@ public class ControllersExceptionHandler {
 		
 		return ResponseEntity.status(detalhesErro.getStatus()).body(detalhesErro);
 	}
+	
+	@ExceptionHandler(UsuarioBolhaNullException.class)
+	public ResponseEntity<DetalhesErro> handleUsuarioBolhaNullException(UsuarioBolhaNullException e, HttpServletRequest request){
+		
+		DetalhesErro detalhesErro = new DetalhesErro();
+		
+		detalhesErro.setStatus(HttpStatus.FAILED_DEPENDENCY);
+		detalhesErro.setTitulo("Usuario invalido ou não infomado!");
+		detalhesErro.setMsgDetalhes("http://qisi.com.br/doc/erro/424");
+		detalhesErro.setTimestamp(System.currentTimeMillis());
+		
+		return ResponseEntity.status(detalhesErro.getStatus()).body(detalhesErro);
+		
+	}
+	
+	@ExceptionHandler(TipoBolhaNullException.class)
+	public ResponseEntity<DetalhesErro> handleTipoBolhaNullException(TipoBolhaNullException e, HttpServletRequest request){
+		
+		DetalhesErro detalhesErro = new DetalhesErro();
+		
+		detalhesErro.setStatus(HttpStatus.FAILED_DEPENDENCY);
+		detalhesErro.setTitulo("Tipo da bolha invalido ou não infomado!");
+		detalhesErro.setMsgDetalhes("http://qisi.com.br/doc/erro/424");
+		detalhesErro.setTimestamp(System.currentTimeMillis());
+		
+		return ResponseEntity.status(detalhesErro.getStatus()).body(detalhesErro);
+	}
+	
+	@ExceptionHandler(NumberFormatException.class)
+	public ResponseEntity<DetalhesErro> handleNumberFormatException(NumberFormatException e, HttpServletRequest request){
+		DetalhesErro detalhesErro = new DetalhesErro();
+		
+		detalhesErro.setStatus(HttpStatus.BAD_REQUEST);
+		detalhesErro.setTitulo("Tipo ou formatação invalida para resquest.");
+		detalhesErro.setMsgDetalhes("http://qisi.com.br/doc/erro/400");
+		detalhesErro.setTimestamp(System.currentTimeMillis());
+		
+		return ResponseEntity.status(detalhesErro.getStatus()).body(detalhesErro);
+	}
+	
+	@ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+	public ResponseEntity<DetalhesErro> handleHttpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException e, HttpServletRequest resquest){
+		DetalhesErro detalhesErro = new DetalhesErro();
+		
+		detalhesErro.setStatus(HttpStatus.METHOD_NOT_ALLOWED);
+		detalhesErro.setTitulo("Metodo não permitido");
+		detalhesErro.setMsgDetalhes("http://qisi.com.br/doc/erro/405");
+		detalhesErro.setTimestamp(System.currentTimeMillis());
+		
+		return ResponseEntity.status(detalhesErro.getStatus()).body(detalhesErro);
+	}
+	
 }

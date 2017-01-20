@@ -1,5 +1,6 @@
 package com.qicubo.mobile.dag.controllers;
 
+import static org.mockito.Matchers.any;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
@@ -31,6 +32,8 @@ import com.qicubo.mobile.dag.services.TipoService;
 import com.qicubo.mobile.dag.services.UsuarioService;
 import com.qicubo.mobile.dag.services.exceptions.BolhaExistenteException;
 import com.qicubo.mobile.dag.services.exceptions.BolhaNaoEncontradaException;
+import com.qicubo.mobile.dag.services.exceptions.TipoNaoEncontradoException;
+import com.qicubo.mobile.dag.services.exceptions.UsuarioNaoEncontradoException;
 import com.qicubo.mobile.dag.types.Latitude;
 import com.qicubo.mobile.dag.types.Longitude;
 import com.qicubo.mobile.dag.utils.TestUtil;
@@ -87,15 +90,15 @@ public class BolhaControllerTest {
 	public void getAllBolhas() throws Exception {
 		Mockito.when(bolhaService.findAll()).thenReturn(listaBolhas);
 		
+		final String BASE_LINK_RESPONSE = "http://localhost/rest/bolhas/";
+		
 		mockMvc.perform(get(TestUtil.GET_ALL_BOLHAS_URI))
 												 .andExpect(status().isOk())
 												 .andExpect(jsonPath("$", Matchers.hasSize(3)))
-												 .andExpect(jsonPath("$[*].usuarioCriacaoLogin", Matchers.containsInAnyOrder(listaBolhas.get(0).getUsuarioCriacao().getLogin(),
-														 																	 listaBolhas.get(1).getUsuarioCriacao().getLogin(),
-														 																	 listaBolhas.get(2).getUsuarioCriacao().getLogin())))
-												 .andExpect(jsonPath("$[*].nome", Matchers.containsInAnyOrder(listaBolhas.get(0).getNome(),
-														 													  listaBolhas.get(1).getNome(),
-														 													  listaBolhas.get(2).getNome())));
+												 .andExpect(jsonPath("$[*].href", Matchers.containsInAnyOrder(BASE_LINK_RESPONSE.concat(listaBolhas.get(0).getId().toString()),
+														 													  BASE_LINK_RESPONSE.concat(listaBolhas.get(1).getId().toString()),
+														 													  BASE_LINK_RESPONSE.concat(listaBolhas.get(2).getId().toString())
+														 													  )));
 		
 		Mockito.verify(bolhaService, Mockito.times(1)).findAll();
 		Mockito.verifyNoMoreInteractions(bolhaService);
@@ -178,7 +181,7 @@ public class BolhaControllerTest {
 	@Test
 	public void getBolhaByUserInvalidLogin() throws Exception{
 		String login = "LoginTest";
-		Mockito.when(usuarioService.findByLogin(login)).thenReturn(null);
+		Mockito.when(usuarioService.findByLogin(login)).thenThrow(new UsuarioNaoEncontradoException("Usuario inválido"));
 		
 		mockMvc.perform(get(TestUtil.GET_BOLHAS_BY_USER_LOGIN_URI, login)).andExpect(status().isFailedDependency());
 
@@ -206,6 +209,8 @@ public class BolhaControllerTest {
 	
 	@Test
 	public void getCloserBolhas() throws Exception{
+
+		final String BASE_LINK_RESPONSE = "http://localhost/rest/bolhas/";
 		
 		Latitude latitudeTest = new Latitude("-22.222222");
 		Longitude longitudeTest = new Longitude("-47.777777");
@@ -216,16 +221,14 @@ public class BolhaControllerTest {
 												 .param("lat", latitudeTest.toString())
 												 .param("longi", longitudeTest.toString()))
 		                                         .andExpect(status().isOk())
-												 .andExpect(jsonPath("$", Matchers.hasSize(3)))
 												 .andExpect(status().isOk())
 												 .andExpect(jsonPath("$", Matchers.hasSize(3)))
-												 .andExpect(jsonPath("$[*].usuarioCriacaoLogin", Matchers.containsInAnyOrder(listaBolhas.get(0).getUsuarioCriacao().getLogin(),
-														 																	 listaBolhas.get(1).getUsuarioCriacao().getLogin(),
-														 																	 listaBolhas.get(2).getUsuarioCriacao().getLogin())))
-												 .andExpect(jsonPath("$[*].nome", Matchers.containsInAnyOrder(listaBolhas.get(0).getNome(),
-														 													  listaBolhas.get(1).getNome(),
-														 													  listaBolhas.get(2).getNome())));
-		
+												 .andExpect(jsonPath("$[*].href", Matchers.containsInAnyOrder(BASE_LINK_RESPONSE.concat(listaBolhas.get(0).getId().toString()),
+														 													  BASE_LINK_RESPONSE.concat(listaBolhas.get(1).getId().toString()),
+														 													  BASE_LINK_RESPONSE.concat(listaBolhas.get(2).getId().toString())
+														 													  )));
+
+
 		Mockito.verify(bolhaService, Mockito.times(1)).findAllCloserBolhas(latitudeTest, longitudeTest);
 		Mockito.verifyNoMoreInteractions(bolhaService);
 		
@@ -262,7 +265,7 @@ public class BolhaControllerTest {
 	    
 	    Mockito.when(tipoService.findByName(bolhaDTO.getTipoNome())).thenReturn(bolha.getTipo());
 	    Mockito.when(usuarioService.findByLogin(bolhaDTO.getUsuarioCriacaoLogin())).thenReturn(bolha.getUsuarioCriacao());
-	    Mockito.when(bolhaService.create(bolha)).thenReturn(bolha);
+	    Mockito.when(bolhaService.create(any(Bolha.class))).thenReturn(bolha);
 	    
         mockMvc.perform(post(TestUtil.CREATE_BOLHA_URI).contentType(TestUtil.APPLICATION_JSON_UTF8)
         														.content(TestUtil.convertObjectToJsonBytes(bolhaDTO)))
@@ -286,7 +289,7 @@ public class BolhaControllerTest {
 	    
 	    bolhaDTO = mapper.map(bolha, BolhaDTO.class);
 	    
-	    Mockito.when(tipoService.findByName(bolhaDTO.getTipoNome())).thenReturn(bolha.getTipo());
+	    Mockito.when(tipoService.findByName(bolhaDTO.getTipoNome())).thenThrow(new TipoNaoEncontradoException("Tipo inválido!"));
 	    Mockito.when(usuarioService.findByLogin(bolhaDTO.getUsuarioCriacaoLogin())).thenReturn(bolha.getUsuarioCriacao());
 	    
 	    
@@ -312,7 +315,7 @@ public class BolhaControllerTest {
 	    bolhaDTO = mapper.map(bolha, BolhaDTO.class);
 	    
 	    Mockito.when(tipoService.findByName(bolhaDTO.getTipoNome())).thenReturn(bolha.getTipo());
-	    Mockito.when(usuarioService.findByLogin(bolhaDTO.getUsuarioCriacaoLogin())).thenReturn(bolha.getUsuarioCriacao());
+	    Mockito.when(usuarioService.findByLogin(bolhaDTO.getUsuarioCriacaoLogin())).thenThrow(new UsuarioNaoEncontradoException("Usuario inválido ou não informado!"));
 	    
 	    
         mockMvc.perform(post(TestUtil.CREATE_BOLHA_URI).contentType(TestUtil.APPLICATION_JSON_UTF8)

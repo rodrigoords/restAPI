@@ -3,6 +3,7 @@ package com.qicubo.mobile.dag.services;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 import javax.transaction.Transactional;
 
@@ -22,6 +23,7 @@ import com.qicubo.mobile.dag.types.Longitude;
 @Service("bolhaService")
 public class BolhaServiceImpl implements BolhaService {
     
+	private static final Logger log = Logger.getLogger(UsuarioService.class.getName());
     private static final BigDecimal PERIMETRO_BOLHA_KM = new BigDecimal(50);
 
 	@Autowired
@@ -39,6 +41,7 @@ public class BolhaServiceImpl implements BolhaService {
 
 	@Override
 	public Bolha create(Bolha bolha) {
+		log.info("Criando bolha a partir de uma entidade Bolha");
 		return bolhaDao.save(bolha);
 	}
 

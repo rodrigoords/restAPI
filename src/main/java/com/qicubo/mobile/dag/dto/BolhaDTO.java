@@ -1,10 +1,8 @@
 package com.qicubo.mobile.dag.dto;
 
-import java.io.Serializable;
+import org.springframework.hateoas.ResourceSupport;
 
-public class BolhaDTO implements Serializable {
-
-    private static final long serialVersionUID = 1L;
+public class BolhaDTO extends ResourceSupport{
 
     private String nome;
     private String descricao;
